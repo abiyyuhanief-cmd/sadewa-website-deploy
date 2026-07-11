@@ -15,6 +15,7 @@ export default async function AdminDashboardLayout({
   } = await supabase.auth.getUser();
 
   if (!user) redirect("/admin/login");
+  if (user.user_metadata?.password_set === false) redirect("/admin/set-password");
 
   return (
     <div className="min-h-[70vh] bg-paper-100">
@@ -31,6 +32,9 @@ export default async function AdminDashboardLayout({
               </Link>
               <Link href="/admin/cerita" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
                 Cerita
+              </Link>
+              <Link href="/admin/users" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+                Users
               </Link>
             </nav>
           </div>
@@ -52,6 +56,9 @@ export default async function AdminDashboardLayout({
           </Link>
           <Link href="/admin/cerita" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
             Cerita
+          </Link>
+          <Link href="/admin/users" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+            Users
           </Link>
         </nav>
       </header>

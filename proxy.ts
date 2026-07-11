@@ -30,7 +30,8 @@ export async function proxy(request: NextRequest) {
   } = await supabase.auth.getUser();
 
   const path = request.nextUrl.pathname;
-  const isAdminRoute = path.startsWith("/admin") && path !== "/admin/login";
+  const isPublicAdminRoute = path === "/admin/login" || path === "/admin/set-password";
+  const isAdminRoute = path.startsWith("/admin") && !isPublicAdminRoute;
 
   if (isAdminRoute && !user) {
     return NextResponse.redirect(new URL("/admin/login", request.url));
