@@ -85,6 +85,10 @@
   --radius-badge: 999px;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background: var(--paper-50);
   color: var(--ink-900);

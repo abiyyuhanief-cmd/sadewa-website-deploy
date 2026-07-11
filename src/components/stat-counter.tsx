@@ -7,10 +7,12 @@ export default function StatCounter({
   value,
   suffix = "",
   label,
+  icon,
 }: {
   value: number;
   suffix?: string;
   label: string;
+  icon?: string;
 }) {
   const ref = useRef<HTMLDivElement>(null);
   const inView = useInView(ref, { once: true, margin: "-80px" });
@@ -38,6 +40,11 @@ export default function StatCounter({
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="rounded-[4px_20px_4px_20px] bg-ink-900 p-7"
     >
+      {icon && (
+        <div className="mb-4 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-300/15 text-lg">
+          {icon}
+        </div>
+      )}
       <p className="font-display text-4xl font-semibold text-teal-300 sm:text-[40px]">
         {display.toLocaleString("id-ID")}
         {suffix}

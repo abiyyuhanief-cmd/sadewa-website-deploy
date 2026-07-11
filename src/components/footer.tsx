@@ -2,9 +2,10 @@ import Image from "next/image";
 import Link from "next/link";
 
 const socials = [
-  { label: "Instagram", href: "#" },
-  { label: "Twitter/X", href: "#" },
-  { label: "LinkedIn", href: "#" },
+  {
+    label: "Instagram",
+    href: "https://www.instagram.com/sadewaind?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==",
+  },
 ];
 
 export default function Footer() {
@@ -43,8 +44,18 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/cerita-guim" className="hover:text-teal-300">
+                  GUIM Story
+                </Link>
+              </li>
+              <li>
+                <Link href="/cerita" className="hover:text-teal-300">
+                  Cerita
+                </Link>
+              </li>
+              <li>
                 <Link href="/#daftar-minat" className="hover:text-teal-300">
-                  Daftar Minat
+                  Terhubung
                 </Link>
               </li>
             </ul>
@@ -54,7 +65,12 @@ export default function Footer() {
             <ul className="mt-3 space-y-2 text-sm text-ink-100">
               {socials.map((s) => (
                 <li key={s.label}>
-                  <a href={s.href} className="hover:text-teal-300">
+                  <a
+                    href={s.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="hover:text-teal-300"
+                  >
                     {s.label}
                   </a>
                 </li>
