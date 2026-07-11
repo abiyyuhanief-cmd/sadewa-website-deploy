@@ -27,10 +27,10 @@ export default async function AdminDashboardLayout({
             </Link>
             <nav className="hidden items-center gap-5 sm:flex">
               <Link href="/admin/cerita-guim" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
-                Cerita GUIM
+                GUIM Story
               </Link>
-              <Link href="/admin/berita" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
-                Berita
+              <Link href="/admin/cerita" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+                Cerita
               </Link>
             </nav>
           </div>
@@ -48,10 +48,10 @@ export default async function AdminDashboardLayout({
         </div>
         <nav className="flex items-center gap-5 border-t border-paper-200 px-6 py-3 sm:hidden">
           <Link href="/admin/cerita-guim" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
-            Cerita GUIM
+            GUIM Story
           </Link>
-          <Link href="/admin/berita" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
-            Berita
+          <Link href="/admin/cerita" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+            Cerita
           </Link>
         </nav>
       </header>

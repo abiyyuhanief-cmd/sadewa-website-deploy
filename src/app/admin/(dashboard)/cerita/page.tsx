@@ -1,27 +1,27 @@
 import Link from "next/link";
 import { createClient } from "@/lib/supabase/server";
-import type { Berita } from "@/lib/types";
+import type { Cerita } from "@/lib/types";
 
-export default async function AdminBeritaListPage() {
+export default async function AdminCeritaListPage() {
   const supabase = await createClient();
   const { data } = await supabase
-    .from("berita")
+    .from("cerita")
     .select("*")
     .order("created_at", { ascending: false });
-  const list = (data ?? []) as Berita[];
+  const list = (data ?? []) as Cerita[];
 
   return (
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-ink-900">Berita</h1>
+          <h1 className="font-display text-2xl font-semibold text-ink-900">Cerita</h1>
           <p className="mt-1 text-sm text-ink-600">{list.length} artikel</p>
         </div>
         <Link
-          href="/admin/berita/new"
+          href="/admin/cerita/new"
           className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-paper-50 hover:bg-teal-700"
         >
-          + Tulis Berita
+          + Tulis Cerita
         </Link>
       </div>
 
@@ -51,7 +51,7 @@ export default async function AdminBeritaListPage() {
                     </span>
                   </td>
                   <td className="px-5 py-3 text-right">
-                    <Link href={`/admin/berita/${b.id}`} className="text-sm font-semibold text-teal-700 hover:text-teal-800">
+                    <Link href={`/admin/cerita/${b.id}`} className="text-sm font-semibold text-teal-700 hover:text-teal-800">
                       Edit →
                     </Link>
                   </td>

@@ -58,7 +58,7 @@ export default function HomePage() {
               href="#daftar-minat"
               className="rounded-lg bg-teal-600 px-7 py-3.5 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700"
             >
-              Daftar Minat →
+              Terhubung dengan Kami →
             </Link>
             <Link
               href="/about"
@@ -102,7 +102,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Statistik dampak — FR-003, FR-116 (angka sama dengan About & Cerita GUIM) */}
+      {/* Statistik dampak — FR-003, FR-116 (angka sama dengan About & GUIM Story) */}
       <section className="bg-paper-100">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Rekam Jejak</p>
@@ -110,15 +110,16 @@ export default function HomePage() {
             Dampak yang Terus Bertumbuh
           </h2>
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
-            <StatCounter value={14} suffix=" th" label="Gerakan UI Mengajar" />
-            <StatCounter value={8} suffix=" th" label="Jelajah Dewantara" />
-            <StatCounter value={guimCumulativeStats.siswa} suffix="+" label="Siswa & guru SD terdampak GUIM" />
+            <StatCounter value={15} suffix=" th" label="Gerakan UI Mengajar" icon="🎓" />
+            <StatCounter value={8} suffix=" th" label="Jelajah Dewantara" icon="✈️" />
+            <StatCounter value={8565} suffix="+" label="Siswa & guru SD terdampak GUIM" icon="🧑‍🎓" />
+            {/* <StatCounter value={guimCumulativeStats.siswa} suffix="+" label="Siswa & guru SD terdampak GUIM" /> */}
           </div>
           <Link
             href="/cerita-guim"
             className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-teal-700 hover:text-teal-800"
           >
-            Lihat Cerita Lengkap GUIM →
+            Lihat 1 Dekade GUIM Story →
           </Link>
         </div>
       </section>
@@ -169,17 +170,18 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Rekrutmen teaser + form — FR-005, FR-008 */}
-      <section id="daftar-minat" className="bg-ink-900 text-paper-50">
+      {/* Kolaborasi teaser + form — FR-005, FR-008 */}
+      <section id="daftar-minat" className="scroll-mt-24 bg-ink-900 text-paper-50">
         <div className="mx-auto grid max-w-6xl gap-12 px-6 py-24 sm:grid-cols-2 sm:items-center">
           <div>
-            <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-300">Rekrutmen Terbuka</p>
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-300">Kolaborasi & Koneksi</p>
             <h2 className="mt-2 font-display text-3xl font-semibold sm:text-4xl">
-              Bergabung dan Belajar Bersama Kami
+              Mari Terhubung dengan Kami
             </h2>
             <p className="mt-4 max-w-md text-ink-200">
-              Posisi lengkap relawan dan campaign akan dibuka menyusul. Daftarkan minatmu sekarang — kami
-              hubungi lewat email begitu pendaftaran resmi dibuka.
+              Sadewa saat ini sedang tidak membuka pendaftaran relawan/anggota secara umum, namun kami
+              tetap terbuka untuk kolaborasi. Tinggalkan kontakmu — kami hubungi jika ada peluang yang
+              sesuai.
             </p>
           </div>
           <div className="rounded-[4px_20px_4px_20px] bg-paper-white p-7 sm:p-8">

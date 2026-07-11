@@ -31,26 +31,26 @@ function buildRecord(formData: FormData) {
   };
 }
 
-export async function createBerita(_prevState: FormState, formData: FormData): Promise<FormState> {
+export async function createCerita(_prevState: FormState, formData: FormData): Promise<FormState> {
   const supabase = await createClient();
   const record = buildRecord(formData);
 
   if (!record.judul || !record.slug || !record.konten) {
-    return { error: "Judul dan isi berita wajib diisi." };
+    return { error: "Judul dan isi cerita wajib diisi." };
   }
 
-  const { error } = await supabase.from("berita").insert({
+  const { error } = await supabase.from("cerita").insert({
     ...record,
     published_at: record.status === "published" ? new Date().toISOString() : null,
   });
   if (error) return { error: error.message };
 
-  revalidatePath("/berita");
-  revalidatePath("/admin/berita");
-  redirect("/admin/berita");
+  revalidatePath("/cerita");
+  revalidatePath("/admin/cerita");
+  redirect("/admin/cerita");
 }
 
-export async function updateBerita(
+export async function updateCerita(
   id: string,
   currentPublishedAt: string | null,
   _prevState: FormState,
@@ -60,25 +60,25 @@ export async function updateBerita(
   const record = buildRecord(formData);
 
   if (!record.judul || !record.slug || !record.konten) {
-    return { error: "Judul dan isi berita wajib diisi." };
+    return { error: "Judul dan isi cerita wajib diisi." };
   }
 
   const published_at =
     record.status === "published" ? currentPublishedAt ?? new Date().toISOString() : currentPublishedAt;
 
-  const { error } = await supabase.from("berita").update({ ...record, published_at }).eq("id", id);
+  const { error } = await supabase.from("cerita").update({ ...record, published_at }).eq("id", id);
   if (error) return { error: error.message };
 
-  revalidatePath("/berita");
-  revalidatePath(`/berita/${record.slug}`);
-  revalidatePath("/admin/berita");
-  redirect("/admin/berita");
+  revalidatePath("/cerita");
+  revalidatePath(`/cerita/${record.slug}`);
+  revalidatePath("/admin/cerita");
+  redirect("/admin/cerita");
 }
 
-export async function deleteBerita(id: string) {
+export async function deleteCerita(id: string) {
   const supabase = await createClient();
-  await supabase.from("berita").delete().eq("id", id);
-  revalidatePath("/berita");
-  revalidatePath("/admin/berita");
-  redirect("/admin/berita");
+  await supabase.from("cerita").delete().eq("id", id);
+  revalidatePath("/cerita");
+  revalidatePath("/admin/cerita");
+  redirect("/admin/cerita");
 }

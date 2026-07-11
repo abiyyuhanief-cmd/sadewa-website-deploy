@@ -14,7 +14,7 @@ export default async function AdminCeritaGuimListPage() {
     <div>
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="font-display text-2xl font-semibold text-ink-900">Cerita GUIM</h1>
+          <h1 className="font-display text-2xl font-semibold text-ink-900">GUIM Story</h1>
           <p className="mt-1 text-sm text-ink-600">{list.length} entri angkatan</p>
         </div>
         <Link

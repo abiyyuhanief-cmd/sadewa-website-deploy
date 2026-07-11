@@ -18,7 +18,7 @@ export default function AdminLoginPage() {
           className="mb-6 h-9 w-auto"
         />
         <h1 className="font-display text-2xl font-semibold text-ink-900">Admin Panel</h1>
-        <p className="mt-1 text-sm text-ink-600">Masuk untuk mengelola Cerita GUIM &amp; Berita.</p>
+        <p className="mt-1 text-sm text-ink-600">Masuk untuk mengelola GUIM Story &amp; Cerita.</p>
 
         <form action={action} className="mt-6 space-y-4">
           <div>

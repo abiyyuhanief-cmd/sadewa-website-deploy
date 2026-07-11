@@ -7,8 +7,8 @@ import { useState } from "react";
 const links = [
   { href: "/", label: "Home" },
   { href: "/about", label: "Tentang Kami" },
-  { href: "/cerita-guim", label: "Cerita GUIM" },
-  { href: "/berita", label: "Berita" },
+  { href: "/cerita-guim", label: "GUIM Story" },
+  { href: "/cerita", label: "Cerita" },
 ];
 
 export default function Navbar() {
@@ -42,7 +42,7 @@ export default function Navbar() {
             href="/#daftar-minat"
             className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700"
           >
-            Daftar Minat
+            Terhubung
           </Link>
         </nav>
 
@@ -80,7 +80,7 @@ export default function Navbar() {
             onClick={() => setOpen(false)}
             className="mt-2 rounded-lg bg-teal-600 px-4 py-3 text-center text-base font-semibold text-paper-50"
           >
-            Daftar Minat
+            Terhubung
           </Link>
         </nav>
       )}

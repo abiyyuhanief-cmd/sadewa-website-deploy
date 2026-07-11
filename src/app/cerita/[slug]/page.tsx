@@ -2,12 +2,12 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getBeritaBySlug, getBeritaSlugs } from "@/lib/berita-data";
+import { getCeritaBySlug, getCeritaSlugs } from "@/lib/cerita-data";
 
 export const revalidate = 60;
 
 export async function generateStaticParams() {
-  return getBeritaSlugs();
+  return getCeritaSlugs();
 }
 
 export async function generateMetadata({
@@ -16,10 +16,10 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const b = await getBeritaBySlug(slug);
+  const b = await getCeritaBySlug(slug);
   if (!b) return {};
   return {
-    title: `${b.judul} — Berita — Sadewa`,
+    title: `${b.judul} — Cerita — Sadewa`,
     description: b.ringkasan ?? undefined,
   };
 }
@@ -29,20 +29,20 @@ function formatDate(iso: string | null) {
   return new Date(iso).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
 }
 
-export default async function BeritaDetailPage({
+export default async function CeritaDetailPage({
   params,
 }: {
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const b = await getBeritaBySlug(slug);
+  const b = await getCeritaBySlug(slug);
   if (!b) notFound();
 
   return (
     <article className="bg-paper-50">
       <div className="mx-auto max-w-3xl px-6 py-14 sm:py-18">
-        <Link href="/berita" className="text-xs font-semibold text-teal-700 hover:text-teal-800">
-          ← Semua Berita
+        <Link href="/cerita" className="text-xs font-semibold text-teal-700 hover:text-teal-800">
+          ← Semua Cerita
         </Link>
         <p className="mt-5 text-sm text-ink-500">
           {formatDate(b.published_at)}

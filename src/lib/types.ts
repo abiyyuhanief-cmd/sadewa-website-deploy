@@ -36,7 +36,7 @@ export type GuimStory = {
   updated_at: string;
 };
 
-export type Berita = {
+export type Cerita = {
   id: string;
   slug: string;
   judul: string;

@@ -65,9 +65,9 @@ export default function LeadForm({ sourcePage }: { sourcePage: string }) {
         role="status"
         className="rounded-[4px_20px_4px_20px] border border-teal-200 bg-teal-50 p-8 text-center"
       >
-        <p className="font-display text-xl font-semibold text-teal-800">Terima kasih sudah mendaftar!</p>
+        <p className="font-display text-xl font-semibold text-teal-800">Terima kasih sudah menghubungi kami!</p>
         <p className="mt-2 text-sm text-ink-600">
-          Tim Sadewa akan menghubungi kamu lewat email begitu ada pembaruan program.
+          Tim Sadewa akan menghubungi kamu jika ada peluang kolaborasi yang sesuai.
         </p>
       </div>
     );
@@ -110,13 +110,13 @@ export default function LeadForm({ sourcePage }: { sourcePage: string }) {
 
       <div>
         <label htmlFor="interest" className="mb-1.5 block text-sm font-semibold text-ink-800">
-          Bidang minat <span className="font-normal text-ink-500">(opsional)</span>
+          Bidang kolaborasi <span className="font-normal text-ink-500">(opsional)</span>
         </label>
         <input
           id="interest"
           name="interest"
           type="text"
-          placeholder="mis. relawan pengajar, kemitraan, donasi"
+          placeholder="mis. kolaborasi program, donasi, media partner"
           className="w-full rounded-lg border border-ink-200 bg-paper-white px-4 py-3 text-sm text-ink-900 outline-none placeholder:text-ink-400 focus:border-teal-500 focus:ring-2 focus:ring-teal-500/30"
         />
       </div>
@@ -130,7 +130,7 @@ export default function LeadForm({ sourcePage }: { sourcePage: string }) {
           className="mt-0.5 h-4 w-4 shrink-0 rounded border-ink-300 text-teal-600 focus:ring-teal-500"
         />
         <span>
-          Saya setuju data ini digunakan Sadewa untuk menghubungi saya terkait program dan kesempatan bergabung.
+          Saya setuju data ini digunakan Sadewa untuk menghubungi saya terkait peluang kolaborasi.
         </span>
       </label>
 
@@ -145,7 +145,7 @@ export default function LeadForm({ sourcePage }: { sourcePage: string }) {
         disabled={status === "submitting"}
         className="w-full rounded-lg bg-teal-600 px-6 py-3.5 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
-        {status === "submitting" ? "Mengirim..." : "Daftar Minat"}
+        {status === "submitting" ? "Mengirim..." : "Hubungi Kami"}
       </button>
     </form>
   );

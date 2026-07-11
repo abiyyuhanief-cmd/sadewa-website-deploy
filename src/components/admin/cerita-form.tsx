@@ -1,16 +1,16 @@
 "use client";
 
 import { useActionState } from "react";
-import type { Berita } from "@/lib/types";
-import type { FormState } from "@/app/admin/(dashboard)/berita/actions";
+import type { Cerita } from "@/lib/types";
+import type { FormState } from "@/app/admin/(dashboard)/cerita/actions";
 import ImageUpload from "./image-upload";
 import TiptapEditor from "./tiptap-editor";
 
-export default function BeritaForm({
+export default function CeritaForm({
   initial,
   action,
 }: {
-  initial?: Berita;
+  initial?: Cerita;
   action: (state: FormState, formData: FormData) => Promise<FormState>;
 }) {
   const [state, formAction, pending] = useActionState<FormState, FormData>(action, undefined);
@@ -71,7 +71,7 @@ export default function BeritaForm({
       <ImageUpload name="gambar_utama_url" label="Gambar Utama" defaultValue={initial?.gambar_utama_url} />
 
       <div>
-        <label className="mb-1.5 block text-sm font-semibold text-ink-800">Isi Berita</label>
+        <label className="mb-1.5 block text-sm font-semibold text-ink-800">Isi Cerita</label>
         <TiptapEditor name="konten" defaultValue={initial?.konten} />
       </div>
 

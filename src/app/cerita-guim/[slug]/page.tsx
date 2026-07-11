@@ -18,7 +18,7 @@ export async function generateMetadata({
   const angkatan = await getGuimStoryBySlug(slug);
   if (!angkatan) return {};
   return {
-    title: `${angkatan.nama_angkatan} — Cerita GUIM — Sadewa`,
+    title: `${angkatan.nama_angkatan} — GUIM Story — Sadewa`,
     description: `${angkatan.kabupaten}, ${angkatan.provinsi} · ${angkatan.tahun_pelaksanaan} · ${angkatan.tema}`,
   };
 }

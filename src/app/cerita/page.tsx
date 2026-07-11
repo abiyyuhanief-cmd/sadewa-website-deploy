@@ -1,12 +1,12 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { getBeritaListing } from "@/lib/berita-data";
+import { getCeritaListing } from "@/lib/cerita-data";
 
 export const revalidate = 60;
 
 export const metadata: Metadata = {
-  title: "Berita — Sadewa",
+  title: "Cerita — Sadewa",
   description: "Kabar terkini kegiatan Sayap Dewantara Indonesia (Sadewa).",
 };
 
@@ -15,25 +15,25 @@ function formatDate(iso: string | null) {
   return new Date(iso).toLocaleDateString("id-ID", { day: "numeric", month: "long", year: "numeric" });
 }
 
-export default async function BeritaPage() {
-  const articles = await getBeritaListing();
+export default async function CeritaPage() {
+  const articles = await getCeritaListing();
 
   return (
     <section className="bg-paper-50">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
-        <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Berita</p>
+        <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">📰 Cerita</p>
         <h1 className="mt-2 font-display text-4xl font-semibold text-ink-900 sm:text-5xl">
           Kabar Terkini Sadewa
         </h1>
 
         {articles.length === 0 ? (
-          <p className="mt-10 text-ink-600">Belum ada berita yang diterbitkan.</p>
+          <p className="mt-10 text-ink-600">Belum ada cerita yang diterbitkan.</p>
         ) : (
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
             {articles.map((b) => (
               <Link
                 key={b.id}
-                href={`/berita/${b.slug}`}
+                href={`/cerita/${b.slug}`}
                 className="group overflow-hidden rounded-[4px_20px_4px_20px] border border-paper-200 bg-paper-white transition-shadow hover:shadow-lg"
               >
                 <div className="relative aspect-[16/10] bg-paper-100">
