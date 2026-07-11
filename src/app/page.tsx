@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import StatCounter from "@/components/stat-counter";
 import LeadForm from "@/components/lead-form";
+import { guimCumulativeStats } from "@/lib/guim-stats";
 
 const programs = [
   {
@@ -101,7 +102,7 @@ export default function HomePage() {
         </div>
       </section>
 
-      {/* Statistik dampak — FR-003 */}
+      {/* Statistik dampak — FR-003, FR-116 (angka sama dengan About & Cerita GUIM) */}
       <section className="bg-paper-100">
         <div className="mx-auto max-w-6xl px-6 py-20">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Rekam Jejak</p>
@@ -111,8 +112,14 @@ export default function HomePage() {
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
             <StatCounter value={14} suffix=" th" label="Gerakan UI Mengajar" />
             <StatCounter value={8} suffix=" th" label="Jelajah Dewantara" />
-            <StatCounter value={4792} suffix="+" label="Anak & masyarakat terlibat" />
+            <StatCounter value={guimCumulativeStats.siswa} suffix="+" label="Siswa & guru SD terdampak GUIM" />
           </div>
+          <Link
+            href="/cerita-guim"
+            className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-teal-700 hover:text-teal-800"
+          >
+            Lihat Cerita Lengkap GUIM →
+          </Link>
         </div>
       </section>
 

@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Image from "next/image";
+import Link from "next/link";
 import LeadForm from "@/components/lead-form";
+import { guimCumulativeStats } from "@/lib/guim-stats";
 
 export const metadata: Metadata = {
   title: "Tentang Kami — Sadewa",
@@ -10,9 +12,9 @@ export const metadata: Metadata = {
 
 const timeline = [
   {
-    tag: "Titik awal",
-    title: "Gerakan UI Mengajar lahir",
-    desc: "Gerakan UI Mengajar (GUIM) memulai jejak intervensi pendidikan dasar yang menjadi garis keturunan langsung Sadewa hari ini — rekam jejak yang kini genap 14 tahun berjalan.",
+    tag: "Titik awal — 2011",
+    title: "GUIM 1 berangkat ke Garut",
+    desc: "Gerakan UI Mengajar (GUIM) memulai jejak intervensi pendidikan dasar di Kabupaten Garut, Jawa Barat — cikal bakal garis keturunan langsung Sadewa hari ini.",
   },
   {
     tag: "Kelahiran Sadewa",
@@ -25,9 +27,9 @@ const timeline = [
     desc: "Delapan tahun lalu, Sadewa memperluas jangkauan lewat Jelajah Dewantara — program intervensi lintas daerah yang menjadi katalisator jejaring dan kemandirian pendidikan di wilayah sasaran GUIM.",
   },
   {
-    tag: "Hari ini",
-    title: "4.792+ anak & masyarakat terlibat",
-    desc: "Melalui Training Buddy, Jelajah Dewantara, dan Pendampingan GUIM, Sadewa terus merawat dampak yang terukur — bukan sekadar angka, tapi bukti bahwa gerakan alumni ini bertahan dan bertumbuh.",
+    tag: "Hari ini — 10 angkatan GUIM",
+    title: `${guimCumulativeStats.siswa.toLocaleString("id-ID")}+ siswa & ${guimCumulativeStats.guru.toLocaleString("id-ID")}+ guru terdampak`,
+    desc: `Sepuluh angkatan GUIM telah menjangkau ${guimCumulativeStats.sd} SD di ${guimCumulativeStats.desa} desa, ${guimCumulativeStats.kecamatan} kecamatan, ${guimCumulativeStats.kabupaten} kabupaten, dan ${guimCumulativeStats.provinsi} provinsi — rekam jejak yang kini bisa dibaca lengkap per angkatan.`,
   },
 ];
 
@@ -113,6 +115,12 @@ export default function AboutPage() {
               </li>
             ))}
           </ol>
+          <Link
+            href="/cerita-guim"
+            className="mt-10 inline-flex items-center gap-2 rounded-lg bg-teal-600 px-6 py-3 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700"
+          >
+            Lihat Cerita Lengkap GUIM →
+          </Link>
         </div>
       </section>
 

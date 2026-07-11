@@ -43,6 +43,16 @@ export default function Footer() {
                 </Link>
               </li>
               <li>
+                <Link href="/cerita-guim" className="hover:text-teal-300">
+                  Cerita GUIM
+                </Link>
+              </li>
+              <li>
+                <Link href="/berita" className="hover:text-teal-300">
+                  Berita
+                </Link>
+              </li>
+              <li>
                 <Link href="/#daftar-minat" className="hover:text-teal-300">
                   Daftar Minat
                 </Link>
