@@ -36,6 +36,16 @@ export type GuimStory = {
   updated_at: string;
 };
 
+export type Lead = {
+  id: string;
+  name: string;
+  email: string;
+  interest: string | null;
+  consent: boolean;
+  source_page: string | null;
+  created_at: string;
+};
+
 export type Cerita = {
   id: string;
   slug: string;

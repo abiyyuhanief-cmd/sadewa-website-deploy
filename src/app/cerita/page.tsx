@@ -8,7 +8,7 @@ export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Cerita — Sadewa",
-  description: "Kabar terkini kegiatan Sayap Dewantara Indonesia (Sadewa).",
+  description: "Cerita Kita - Sadewa & GUIM.",
 };
 
 function formatDate(iso: string | null) {
@@ -27,7 +27,7 @@ export default async function CeritaPage() {
           Cerita
         </p>
         <h1 className="mt-2 font-display text-4xl font-semibold text-ink-900 sm:text-5xl">
-          Kabar Terkini Sadewa
+          Cerita Kita
         </h1>
 
         {articles.length === 0 ? (
