@@ -3,6 +3,7 @@ import { Fraunces, Figtree } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
+import PageTransition from "@/components/page-transition";
 
 const fraunces = Fraunces({
   subsets: ["latin"],
@@ -32,7 +33,9 @@ export default function RootLayout({
     <html lang="id" className={`${fraunces.variable} ${figtree.variable} h-full antialiased`}>
       <body className="min-h-full flex flex-col bg-paper-50 text-ink-900">
         <Navbar />
-        <main className="flex-1">{children}</main>
+        <main className="flex-1">
+          <PageTransition>{children}</PageTransition>
+        </main>
         <Footer />
       </body>
     </html>

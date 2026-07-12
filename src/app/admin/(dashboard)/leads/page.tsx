@@ -13,6 +13,7 @@ function formatDate(iso: string) {
 const sourceLabel: Record<string, string> = {
   home: "Home",
   about: "Tentang Kami",
+  "cerita-coming-soon": "Cerita (Segera Hadir)",
 };
 
 export default async function AdminLeadsPage() {

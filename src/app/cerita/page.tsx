@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { Newspaper } from "lucide-react";
 import { getCeritaListing } from "@/lib/cerita-data";
+import Reveal from "@/components/reveal";
+import CeritaComingSoon from "@/components/cerita-coming-soon";
 
 export const revalidate = 60;
 
@@ -31,14 +33,14 @@ export default async function CeritaPage() {
         </h1>
 
         {articles.length === 0 ? (
-          <p className="mt-10 text-ink-600">Belum ada cerita yang diterbitkan.</p>
+          <CeritaComingSoon />
         ) : (
           <div className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
-            {articles.map((b) => (
+            {articles.map((b, i) => (
+              <Reveal key={b.id} delay={(i % 3) * 0.08}>
               <Link
-                key={b.id}
                 href={`/cerita/${b.slug}`}
-                className="group overflow-hidden rounded-[4px_20px_4px_20px] border border-paper-200 bg-paper-white transition-shadow hover:shadow-lg"
+                className="group block overflow-hidden rounded-[4px_20px_4px_20px] border border-paper-200 bg-paper-white transition-shadow hover:shadow-lg"
               >
                 <div className="relative aspect-[16/10] bg-paper-100">
                   {b.gambar_utama_url && (
@@ -55,6 +57,7 @@ export default async function CeritaPage() {
                   )}
                 </div>
               </Link>
+              </Reveal>
             ))}
           </div>
         )}

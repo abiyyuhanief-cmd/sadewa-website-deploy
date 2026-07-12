@@ -2,7 +2,8 @@
 
 import Image from "next/image";
 import Link from "next/link";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
 const links = [
   { href: "/", label: "Home" },
@@ -13,10 +14,27 @@ const links = [
 
 export default function Navbar() {
   const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const reduce = useReducedMotion();
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 16);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <header className="sticky top-0 z-50 bg-paper-50/90 backdrop-blur border-b border-paper-200">
-      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+    <header
+      className={`sticky top-0 z-50 border-b bg-paper-50/90 backdrop-blur transition-[border-color,box-shadow] ${
+        scrolled ? "border-paper-200 shadow-sm" : "border-transparent"
+      }`}
+    >
+      <div
+        className={`mx-auto flex max-w-6xl items-center justify-between px-6 transition-[padding] duration-300 ${
+          scrolled ? "py-2.5" : "py-4"
+        }`}
+      >
         <Link href="/" className="flex items-center gap-2" onClick={() => setOpen(false)}>
           <Image
             src="/brand/logo-horizontal.png"
@@ -24,7 +42,7 @@ export default function Navbar() {
             width={160}
             height={36}
             priority
-            className="h-8 w-auto sm:h-9"
+            className={`w-auto transition-[height] duration-300 ${scrolled ? "h-7" : "h-8 sm:h-9"}`}
           />
         </Link>
 
@@ -40,7 +58,7 @@ export default function Navbar() {
           ))}
           <Link
             href="/#daftar-minat"
-            className="rounded-lg bg-teal-600 px-5 py-2.5 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700"
+            className="rounded-[4px_20px_4px_20px] bg-teal-600 px-5 py-2.5 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700"
           >
             Terhubung
           </Link>
@@ -63,27 +81,38 @@ export default function Navbar() {
         </button>
       </div>
 
-      {open && (
-        <nav className="flex flex-col gap-1 border-t border-paper-200 bg-paper-50 px-6 py-4 md:hidden">
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              onClick={() => setOpen(false)}
-              className="rounded-lg px-2 py-3 text-base font-semibold text-ink-700 hover:bg-paper-100"
-            >
-              {l.label}
-            </Link>
-          ))}
-          <Link
-            href="/#daftar-minat"
-            onClick={() => setOpen(false)}
-            className="mt-2 rounded-lg bg-teal-600 px-4 py-3 text-center text-base font-semibold text-paper-50"
+      <AnimatePresence initial={false}>
+        {open && (
+          <motion.nav
+            key="mobile-menu"
+            initial={reduce ? false : { height: 0, opacity: 0 }}
+            animate={{ height: "auto", opacity: 1 }}
+            exit={reduce ? { opacity: 0 } : { height: 0, opacity: 0 }}
+            transition={{ duration: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="overflow-hidden border-t border-paper-200 bg-paper-50 md:hidden"
           >
-            Terhubung
-          </Link>
-        </nav>
-      )}
+            <div className="flex flex-col gap-1 px-6 py-4">
+              {links.map((l) => (
+                <Link
+                  key={l.href}
+                  href={l.href}
+                  onClick={() => setOpen(false)}
+                  className="rounded-lg px-2 py-3 text-base font-semibold text-ink-700 hover:bg-paper-100"
+                >
+                  {l.label}
+                </Link>
+              ))}
+              <Link
+                href="/#daftar-minat"
+                onClick={() => setOpen(false)}
+                className="mt-2 rounded-[4px_20px_4px_20px] bg-teal-600 px-4 py-3 text-center text-base font-semibold text-paper-50"
+              >
+                Terhubung
+              </Link>
+            </div>
+          </motion.nav>
+        )}
+      </AnimatePresence>
     </header>
   );
 }

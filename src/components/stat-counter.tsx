@@ -39,7 +39,7 @@ export default function StatCounter({
   return (
     <motion.div
       ref={ref}
-      initial={reduceMotion ? false : { opacity: 0, y: 16 }}
+      initial={reduceMotion ? false : { opacity: 0.4, y: 16 }}
       animate={inView ? { opacity: 1, y: 0 } : {}}
       transition={{ duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
       className="rounded-[4px_20px_4px_20px] bg-ink-900 p-7"
