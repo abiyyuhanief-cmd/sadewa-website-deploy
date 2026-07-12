@@ -13,6 +13,8 @@ export default function GuimDataChart({
 }) {
   const width = 720;
   const height = 200;
+  // Ruang di atas bar tertinggi supaya label angka tidak kepotong viewBox.
+  const topPad = 16;
   const gap = 6;
   const groupWidth = width / angkatanLabels.length;
   const barWidth = (groupWidth - gap * (metrics.length + 1)) / metrics.length;
@@ -31,11 +33,16 @@ export default function GuimDataChart({
     );
   }
 
+  // Tiap grup angkatan butuh ruang minimum agar bar & label tidak mepet; kalau
+  // total melebihi kontainer, wrapper overflow-x-auto membuatnya bisa digeser.
+  const minWidth = Math.max(560, angkatanLabels.length * 64);
+
   return (
     <div className="w-full overflow-x-auto">
+      <p className="mb-2 text-center text-[11px] text-ink-500 sm:hidden">← geser untuk lihat semua →</p>
       <svg
-        viewBox={`0 0 ${width} ${height + 24}`}
-        className="min-w-[560px]"
+        viewBox={`0 0 ${width} ${topPad + height + 24}`}
+        style={{ minWidth }}
         role="img"
         aria-label={`Grafik ${metrics.map((m) => m.label).join(" dan ")} per angkatan GUIM`}
       >
@@ -53,7 +60,7 @@ export default function GuimDataChart({
                 const v = m.values[i] ?? 0;
                 const barHeight = (v / max) * height;
                 const x = groupX + gap + mi * (barWidth + gap);
-                const y = height - barHeight;
+                const y = topPad + height - barHeight;
                 return (
                   <g key={m.label}>
                     <rect x={x} y={y} width={barWidth} height={barHeight} fill={m.color} rx={2} />
@@ -65,7 +72,7 @@ export default function GuimDataChart({
                         x={x + barWidth / 2}
                         y={y - 4}
                         textAnchor="middle"
-                        fontSize="9"
+                        fontSize="10"
                         fill="var(--ink-600)"
                       >
                         {v}
@@ -76,9 +83,9 @@ export default function GuimDataChart({
               })}
               <text
                 x={groupX + groupWidth / 2}
-                y={height + 16}
+                y={topPad + height + 16}
                 textAnchor="middle"
-                fontSize="10"
+                fontSize="11"
                 fill="var(--ink-700)"
               >
                 {label}

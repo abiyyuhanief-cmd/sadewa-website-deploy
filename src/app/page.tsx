@@ -3,6 +3,8 @@ import Link from "next/link";
 import { GraduationCap, Plane, Handshake, Users } from "lucide-react";
 import StatCounter from "@/components/stat-counter";
 import LeadForm from "@/components/lead-form";
+import Reveal from "@/components/reveal";
+import Gallery from "@/components/gallery";
 
 const programs = [
   {
@@ -33,50 +35,75 @@ export default function HomePage() {
           width={520}
           height={415}
           aria-hidden
-          className="pointer-events-none absolute -right-24 -top-16 w-[420px] opacity-[0.14] brightness-150 sm:w-[520px]"
+          className="pointer-events-none absolute -right-24 -top-16 hidden w-[420px] opacity-[0.14] brightness-150 sm:w-[520px] lg:block"
         />
-        <div className="relative mx-auto max-w-6xl px-6 py-24 sm:py-32">
-          <Image
-            src="/brand/logo-icon.png"
-            alt="Ikon burung Sadewa"
-            width={72}
-            height={58}
-            className="mb-8 h-14 w-auto brightness-125"
-          />
-          <p className="mb-4 text-xs font-bold uppercase tracking-[0.18em] text-teal-300">
-            Komunitas Perkumpulan · Alumni Gerakan UI Mengajar
-          </p>
-          <h1 className="max-w-2xl font-display text-[40px] font-semibold leading-tight sm:text-6xl">
-            Sayap Dewantara Indonesia
-          </h1>
-          <p className="mt-6 max-w-xl text-lg text-ink-200">
-            Sadewa (Sayap Dewantara Indonesia) mewadahi alumni Gerakan UI Mengajar dan siapa pun yang ingin
-            memberi manfaat berkelanjutan bagi pendidikan dasar di daerah pelosok.
-          </p>
-          <div className="mt-10 flex flex-wrap items-center gap-4">
-            <Link
-              href="#daftar-minat"
-              className="rounded-lg bg-teal-600 px-7 py-3.5 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700"
-            >
-              Terhubung dengan Kami →
-            </Link>
-            <Link
-              href="/about"
-              className="rounded-lg border border-teal-400/50 px-7 py-3.5 text-sm font-semibold text-teal-200 transition-colors hover:border-teal-300 hover:text-teal-100"
-            >
-              Pelajari Lebih Lanjut
-            </Link>
+        <div className="relative mx-auto grid max-w-6xl gap-8 px-6 py-10 sm:py-16 lg:grid-cols-[1.1fr_0.9fr] lg:items-center lg:py-14 xl:py-16">
+          <div>
+            <Image
+              src="/brand/logo-icon.png"
+              alt="Ikon burung Sadewa"
+              width={72}
+              height={58}
+              className="mb-4 h-9 w-auto brightness-125 sm:mb-6 sm:h-12"
+            />
+            <p className="mb-2 text-xs font-bold uppercase tracking-[0.18em] text-teal-300 sm:mb-3">
+              Komunitas Perkumpulan · Alumni Gerakan UI Mengajar
+            </p>
+            <h1 className="max-w-2xl font-display text-3xl font-semibold leading-tight sm:text-5xl lg:text-5xl xl:text-6xl">
+              Sayap Dewantara Indonesia
+            </h1>
+            <p className="mt-3 max-w-xl text-base text-ink-200 sm:mt-5 sm:text-lg">
+              Sadewa (Sayap Dewantara Indonesia) mewadahi alumni Gerakan UI Mengajar dan siapa pun yang ingin
+              memberi manfaat berkelanjutan bagi pendidikan dasar di daerah pelosok.
+            </p>
+            <div className="mt-5 flex flex-wrap items-center gap-3 sm:mt-7 sm:gap-4">
+              <Link
+                href="#daftar-minat"
+                className="rounded-[4px_20px_4px_20px] bg-teal-600 px-7 py-3.5 text-sm font-semibold text-paper-50 shadow-lg shadow-teal-950/30 transition-colors hover:bg-teal-700"
+              >
+                Terhubung dengan Kami →
+              </Link>
+              <Link
+                href="/about"
+                className="text-sm font-semibold text-teal-200 underline-offset-4 transition-colors hover:text-teal-100 hover:underline"
+              >
+                Pelajari Lebih Lanjut
+              </Link>
+            </div>
+            <span className="mt-5 hidden items-center gap-2 rounded-full bg-teal-600/90 px-4 py-2 text-xs font-bold tracking-wide sm:mt-7 sm:inline-flex">
+              #DedikasiUntukEdukasi
+            </span>
           </div>
-          <span className="mt-10 inline-flex items-center gap-2 rounded-full bg-teal-600/90 px-4 py-2 text-xs font-bold tracking-wide">
-            #DedikasiUntukEdukasi
-          </span>
+
+          {/* Visual sisi kanan — foto kegiatan + kartu statistik ringkas, biar ruang kanan di desktop tidak kosong.
+              mb-10 menyediakan ruang agar kartu float tidak kepotong batas section. */}
+          <div className="relative mb-10 hidden lg:block">
+            <div className="relative aspect-[5/6] overflow-hidden rounded-[4px_32px_4px_32px] shadow-2xl">
+              <Image
+                src="/gallery/anak-semangat.jpg"
+                alt="Anak-anak sekolah dasar antusias mengikuti kegiatan Sadewa"
+                fill
+                priority
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-ink-900/50 via-transparent to-transparent" />
+            </div>
+            <div className="absolute -bottom-6 -left-6 rounded-[4px_20px_4px_20px] bg-paper-white p-5 shadow-xl">
+              <p className="font-display text-2xl font-semibold text-teal-700">15th</p>
+              <p className="mt-0.5 text-xs text-ink-600">Gerakan UI Mengajar</p>
+              <div className="mt-3 border-t border-paper-200 pt-3">
+                <p className="font-display text-2xl font-semibold text-teal-700">8.565+</p>
+                <p className="mt-0.5 text-xs text-ink-600">Siswa &amp; guru terdampak</p>
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
       {/* About teaser — FR-002, copy unik (bukan duplikat About) */}
       <section className="border-b border-paper-200 bg-paper-50">
         <div className="mx-auto max-w-6xl px-6 py-20">
-          <div className="grid gap-10 sm:grid-cols-[1fr_1.4fr] sm:items-center">
+          <Reveal className="grid gap-10 sm:grid-cols-[1fr_1.4fr] sm:items-center">
             <div>
               <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Siapa Kami</p>
               <h2 className="mt-2 font-display text-3xl font-semibold text-ink-900 sm:text-4xl">
@@ -98,7 +125,7 @@ export default function HomePage() {
                 Baca sejarah lengkap kami →
               </Link>
             </div>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -109,7 +136,7 @@ export default function HomePage() {
           <h2 className="mt-2 font-display text-3xl font-semibold text-ink-900 sm:text-4xl">
             Dampak yang Terus Bertumbuh
           </h2>
-          <div className="mt-10 grid gap-5 sm:grid-cols-3">
+          <div className="mt-10 grid gap-5 sm:grid-cols-2 md:grid-cols-3">
             <StatCounter
               value={15}
               suffix=" th"
@@ -146,10 +173,11 @@ export default function HomePage() {
           <h2 className="mt-2 font-display text-3xl font-semibold text-ink-900 sm:text-4xl">
             Tiga Jalur Kontribusi
           </h2>
-          <div className="mt-10 grid gap-6 sm:grid-cols-3">
-            {programs.map((p) => (
-              <div
+          <div className="mt-10 grid gap-6 sm:grid-cols-2 md:grid-cols-3">
+            {programs.map((p, i) => (
+              <Reveal
                 key={p.title}
+                delay={i * 0.08}
                 className="rounded-[4px_20px_4px_20px] border border-paper-200 bg-paper-white p-7"
               >
                 <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100">
@@ -157,7 +185,7 @@ export default function HomePage() {
                 </div>
                 <h3 className="font-display text-lg font-semibold text-ink-900">{p.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-600">{p.desc}</p>
-              </div>
+              </Reveal>
             ))}
           </div>
         </div>
@@ -170,18 +198,14 @@ export default function HomePage() {
           <h2 className="mt-2 font-display text-3xl font-semibold text-ink-900 sm:text-4xl">
             Cerita dari Titik Sasaran
           </h2>
-          <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
-            {[
+          <Gallery
+            images={[
               { src: "/gallery/kelas-peta.jpg", alt: "Relawan Sadewa mendampingi siswa belajar peta Indonesia di kelas" },
               { src: "/gallery/anak-semangat.jpg", alt: "Anak-anak sekolah dasar antusias mengikuti kegiatan Sadewa" },
               { src: "/gallery/tim-sadewa.jpg", alt: "Tim Sadewa berkumpul dalam rapat awal tahun" },
               { src: "/gallery/tim-serah-terima.jpg", alt: "Serah terima Gerakan UI Mengajar angkatan 12 di Kecamatan Ngluyu" },
-            ].map((img) => (
-              <div key={img.src} className="relative aspect-[3/4] overflow-hidden rounded-[4px_20px_4px_20px]">
-                <Image src={img.src} alt={img.alt} fill className="object-cover" />
-              </div>
-            ))}
-          </div>
+            ]}
+          />
           <Link
             href="/cerita"
             className="mt-6 inline-flex items-center gap-1.5 text-sm font-semibold text-teal-700 hover:text-teal-800"
@@ -194,7 +218,7 @@ export default function HomePage() {
       {/* Kolaborasi teaser + form — FR-005, FR-008 */}
       <section id="daftar-minat" className="scroll-mt-24 bg-ink-900 text-paper-50">
         <div className="mx-auto grid max-w-6xl gap-12 px-6 py-24 sm:grid-cols-2 sm:items-center">
-          <div>
+          <Reveal>
             <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-300">Kolaborasi & Koneksi</p>
             <h2 className="mt-2 font-display text-3xl font-semibold sm:text-4xl">
               Mari Terhubung dengan Kami
@@ -204,7 +228,7 @@ export default function HomePage() {
               tetap terbuka untuk kolaborasi. Tinggalkan kontakmu — kami hubungi jika ada peluang yang
               sesuai.
             </p>
-          </div>
+          </Reveal>
           <div className="rounded-[4px_20px_4px_20px] bg-paper-white p-7 sm:p-8">
             <LeadForm sourcePage="home" />
           </div>

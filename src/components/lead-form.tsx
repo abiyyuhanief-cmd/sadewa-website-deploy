@@ -122,14 +122,17 @@ export default function LeadForm({ sourcePage }: { sourcePage: string }) {
       </div>
 
       <label htmlFor="consent" className="flex items-start gap-3 text-sm text-ink-700">
-        <input
-          id="consent"
-          name="consent"
-          type="checkbox"
-          required
-          className="mt-0.5 h-4 w-4 shrink-0 rounded border-ink-300 text-teal-600 focus:ring-teal-500"
-        />
-        <span>
+        {/* Padding di sekitar checkbox memperluas hit area ke ~24x24px tanpa mengubah ukuran visualnya. */}
+        <span className="-m-1.5 flex shrink-0 items-center justify-center p-1.5">
+          <input
+            id="consent"
+            name="consent"
+            type="checkbox"
+            required
+            className="h-4 w-4 rounded border-ink-300 text-teal-600 focus:ring-teal-500"
+          />
+        </span>
+        <span className="pt-1">
           Saya setuju data ini digunakan Sadewa untuk menghubungi saya terkait peluang kolaborasi.
         </span>
       </label>
@@ -143,7 +146,7 @@ export default function LeadForm({ sourcePage }: { sourcePage: string }) {
       <button
         type="submit"
         disabled={status === "submitting"}
-        className="w-full rounded-lg bg-teal-600 px-6 py-3.5 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
+        className="w-full rounded-[4px_20px_4px_20px] bg-teal-600 px-6 py-3.5 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {status === "submitting" ? "Mengirim..." : "Hubungi Kami"}
       </button>

@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import Link from "next/link";
 import { getGuimStoryBySlug, getGuimStorySlugs } from "@/lib/guim-story-data";
+import GuimTimeline from "@/components/guim-timeline";
 
 export const revalidate = 300;
 
@@ -122,26 +123,11 @@ export default async function CeritaGuimDetailPage({
 
           {(a.timeline_pra_aksi || a.timeline_aksi || a.timeline_pasca_aksi) && (
             <Section title="Timeline">
-              <div className="grid gap-6 sm:grid-cols-3">
-                {a.timeline_pra_aksi && (
-                  <div>
-                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-teal-600">Pra Aksi</p>
-                    <BulletList items={a.timeline_pra_aksi} />
-                  </div>
-                )}
-                {a.timeline_aksi && (
-                  <div>
-                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-teal-600">Aksi</p>
-                    <BulletList items={a.timeline_aksi} />
-                  </div>
-                )}
-                {a.timeline_pasca_aksi && (
-                  <div>
-                    <p className="mb-2 text-xs font-bold uppercase tracking-wider text-teal-600">Pasca Aksi</p>
-                    <BulletList items={a.timeline_pasca_aksi} />
-                  </div>
-                )}
-              </div>
+              <GuimTimeline
+                praAksi={a.timeline_pra_aksi}
+                aksi={a.timeline_aksi}
+                pascaAksi={a.timeline_pasca_aksi}
+              />
             </Section>
           )}
 

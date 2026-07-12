@@ -20,7 +20,7 @@ export default function Footer() {
             height={32}
             className="mb-4 h-9 w-auto brightness-125"
           />
-          <p className="font-display text-lg font-semibold">Sadewa — Sayap Dewantara</p>
+          <p className="font-display text-lg font-semibold">Sadewa — Sayap Dewantara Indonesia</p>
           <p className="mt-2 text-sm text-ink-200">
             Memperkuat pendidikan dasar di daerah pelosok Indonesia bersama alumni Gerakan UI Mengajar.
           </p>

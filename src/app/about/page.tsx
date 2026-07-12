@@ -13,6 +13,7 @@ import {
   type LucideIcon,
 } from "lucide-react";
 import LeadForm from "@/components/lead-form";
+import Reveal from "@/components/reveal";
 import { guimCumulativeStats } from "@/lib/guim-stats";
 
 export const metadata: Metadata = {
@@ -99,7 +100,7 @@ export default function AboutPage() {
           <div className="absolute inset-0 bg-gradient-to-r from-paper-50 via-paper-50/40 to-transparent" />
         </div>
         <div className="relative mx-auto grid max-w-5xl gap-10 px-6 py-16 sm:grid-cols-[1fr_1fr]">
-          <div>
+          <Reveal>
             <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100">
               <Lightbulb className="h-5 w-5 text-teal-700" aria-hidden strokeWidth={2} />
             </div>
@@ -110,8 +111,8 @@ export default function AboutPage() {
               tidak sekadar kembali ke rutinitas masing-masing — mereka membangun Sadewa sebagai rumah
               bersama untuk melanjutkan kontribusi secara terstruktur dan bertanggung jawab secara hukum.
             </p>
-          </div>
-          <div>
+          </Reveal>
+          <Reveal delay={0.08}>
             <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100">
               <Scale className="h-5 w-5 text-teal-700" aria-hidden strokeWidth={2} />
             </div>
@@ -122,7 +123,7 @@ export default function AboutPage() {
               alami menjadi anggota Sadewa, menjadikan komunitas ini kelanjutan formal dari semangat yang
               tumbuh di GUIM — bukan organisasi baru yang lahir tanpa akar.
             </p>
-          </div>
+          </Reveal>
         </div>
       </section>
 
@@ -142,22 +143,22 @@ export default function AboutPage() {
             hukum — semata agar dedikasi ini tidak berhenti di satu angkatan saja.
           </p>
           <div className="mt-8 grid gap-4 sm:grid-cols-2">
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[4px_24px_4px_24px]">
+            <Reveal className="relative aspect-[4/3] overflow-hidden rounded-[4px_24px_4px_24px]">
               <Image
                 src="/gallery/tim-pengurus.jpg"
                 alt="Pengurus Sadewa berkumpul dalam rapat awal tahun"
                 fill
                 className="object-cover"
               />
-            </div>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[4px_24px_4px_24px]">
+            </Reveal>
+            <Reveal delay={0.08} className="relative aspect-[4/3] overflow-hidden rounded-[4px_24px_4px_24px]">
               <Image
                 src="/gallery/rapat-pengurus.jpg"
                 alt="Rapat koordinasi pengurus Sadewa bersama mitra lapangan"
                 fill
                 className="object-cover"
               />
-            </div>
+            </Reveal>
           </div>
         </div>
       </section>
@@ -176,8 +177,8 @@ export default function AboutPage() {
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-300">Perjalanan Kami</p>
           <h2 className="mt-2 font-display text-3xl font-semibold sm:text-4xl">Dari GUIM ke Sadewa</h2>
           <ol className="mt-12 space-y-10 border-l border-ink-700 pl-8">
-            {timeline.map((t) => (
-              <li key={t.title} className="relative">
+            {timeline.map((t, i) => (
+              <Reveal as="li" key={t.title} delay={i * 0.08} className="relative">
                 <span className="absolute -left-[38px] top-1 h-3 w-3 rounded-full bg-teal-400" />
                 <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-teal-300">
                   <t.icon className="h-4 w-4" aria-hidden strokeWidth={2} />
@@ -197,12 +198,12 @@ export default function AboutPage() {
                     <p className="text-xs text-ink-300">Salah satu logo resmi angkatan pasca-GUIM Story: GUIM 11</p>
                   </div>
                 )}
-              </li>
+              </Reveal>
             ))}
           </ol>
           <Link
             href="/cerita-guim"
-            className="mt-10 inline-flex items-center gap-2 rounded-lg bg-teal-600 px-6 py-3 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700"
+            className="mt-10 inline-flex items-center gap-2 rounded-[4px_20px_4px_20px] bg-teal-600 px-6 py-3 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700"
           >
             Lihat GUIM Story Lengkap →
           </Link>
