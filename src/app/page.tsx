@@ -1,24 +1,24 @@
 import Image from "next/image";
 import Link from "next/link";
+import { GraduationCap, Plane, Handshake, Users } from "lucide-react";
 import StatCounter from "@/components/stat-counter";
 import LeadForm from "@/components/lead-form";
-import { guimCumulativeStats } from "@/lib/guim-stats";
 
 const programs = [
   {
     title: "Training Buddy",
     desc: "Pelatihan pedagogis dasar untuk relawan nonkeguruan — bekal kompetensi profesional sebelum terjun mengajar di lapangan.",
-    emoji: "🎓",
+    icon: GraduationCap,
   },
   {
     title: "Jelajah Dewantara",
     desc: "Intervensi pendidikan lintas daerah sasaran GUIM, memperkuat jejaring dan membuka akses pengetahuan bagi anak-anak daerah.",
-    emoji: "✈️",
+    icon: Plane,
   },
   {
     title: "Pendampingan GUIM",
     desc: "Kolaborasi intervensi sekolah dasar selama satu bulan bersama alumni Gerakan UI Mengajar di wilayah sasaran.",
-    emoji: "🤝",
+    icon: Handshake,
   },
 ];
 
@@ -110,9 +110,24 @@ export default function HomePage() {
             Dampak yang Terus Bertumbuh
           </h2>
           <div className="mt-10 grid gap-5 sm:grid-cols-3">
-            <StatCounter value={15} suffix=" th" label="Gerakan UI Mengajar" icon="🎓" />
-            <StatCounter value={8} suffix=" th" label="Jelajah Dewantara" icon="✈️" />
-            <StatCounter value={8565} suffix="+" label="Siswa & guru SD terdampak GUIM" icon="🧑‍🎓" />
+            <StatCounter
+              value={15}
+              suffix=" th"
+              label="Gerakan UI Mengajar"
+              icon={<GraduationCap className="h-5 w-5" aria-hidden strokeWidth={2} />}
+            />
+            <StatCounter
+              value={8}
+              suffix=" th"
+              label="Jelajah Dewantara"
+              icon={<Plane className="h-5 w-5" aria-hidden strokeWidth={2} />}
+            />
+            <StatCounter
+              value={8565}
+              suffix="+"
+              label="Siswa & guru SD terdampak GUIM"
+              icon={<Users className="h-5 w-5" aria-hidden strokeWidth={2} />}
+            />
             {/* <StatCounter value={guimCumulativeStats.siswa} suffix="+" label="Siswa & guru SD terdampak GUIM" /> */}
           </div>
           <Link
@@ -137,8 +152,8 @@ export default function HomePage() {
                 key={p.title}
                 className="rounded-[4px_20px_4px_20px] border border-paper-200 bg-paper-white p-7"
               >
-                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100 text-lg">
-                  {p.emoji}
+                <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100">
+                  <p.icon className="h-5 w-5 text-teal-700" aria-hidden strokeWidth={2} />
                 </div>
                 <h3 className="font-display text-lg font-semibold text-ink-900">{p.title}</h3>
                 <p className="mt-2 text-sm leading-relaxed text-ink-600">{p.desc}</p>
