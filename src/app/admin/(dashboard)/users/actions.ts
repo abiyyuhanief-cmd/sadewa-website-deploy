@@ -11,7 +11,10 @@ export async function inviteUser(_prevState: InviteState, formData: FormData): P
     return { error: "Email wajib diisi." };
   }
 
-  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://sadewaind.org";
+  // Read at runtime (SITE_URL is not NEXT_PUBLIC, so it is not inlined at build time).
+  // Canonical host is www — the apex redirects to www, so target www directly to avoid
+  // an extra redirect hop that can drop the auth token fragment.
+  const siteUrl = (process.env.SITE_URL ?? "https://www.sadewaind.org").replace(/\/$/, "");
 
   const supabase = createAdminClient();
   const { error } = await supabase.auth.admin.inviteUserByEmail(email, {

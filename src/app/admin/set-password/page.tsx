@@ -16,27 +16,71 @@ export default function SetPasswordPage() {
 
   useEffect(() => {
     const supabase = createClient();
+    let cancelled = false;
 
-    const {
-      data: { subscription },
-    } = supabase.auth.onAuthStateChange((_event, session) => {
-      setHasSession(Boolean(session));
-      setChecking(false);
-    });
+    async function resolveSession() {
+      const hash = new URLSearchParams(window.location.hash.replace(/^#/, ""));
+      const query = new URLSearchParams(window.location.search);
 
-    supabase.auth.getSession().then(({ data: { session } }) => {
-      setHasSession(Boolean(session));
-      setChecking(false);
-    });
+      // Supabase may report a rejected/expired link via the fragment or query.
+      const urlError = hash.get("error_description") || query.get("error_description");
+      if (urlError) {
+        if (!cancelled) {
+          setError(decodeURIComponent(urlError));
+          setChecking(false);
+        }
+        return;
+      }
 
-    return () => subscription.unsubscribe();
+      // Implicit flow: invite verify endpoint hands us tokens in the URL fragment.
+      const accessToken = hash.get("access_token");
+      const refreshToken = hash.get("refresh_token");
+      if (accessToken && refreshToken) {
+        const { error: setErr } = await supabase.auth.setSession({
+          access_token: accessToken,
+          refresh_token: refreshToken,
+        });
+        window.history.replaceState(null, "", window.location.pathname);
+        if (!cancelled) {
+          setHasSession(!setErr);
+          setChecking(false);
+        }
+        return;
+      }
+
+      // PKCE flow fallback: exchange the code in the query string for a session.
+      const code = query.get("code");
+      if (code) {
+        const { error: exErr } = await supabase.auth.exchangeCodeForSession(code);
+        window.history.replaceState(null, "", window.location.pathname);
+        if (!cancelled) {
+          setHasSession(!exErr);
+          setChecking(false);
+        }
+        return;
+      }
+
+      // No token in URL — fall back to an existing session (already-logged-in admin).
+      const {
+        data: { session },
+      } = await supabase.auth.getSession();
+      if (!cancelled) {
+        setHasSession(Boolean(session));
+        setChecking(false);
+      }
+    }
+
+    resolveSession();
+    return () => {
+      cancelled = true;
+    };
   }, []);
 
   useEffect(() => {
-    if (!checking && !hasSession) {
+    if (!checking && !hasSession && !error) {
       router.replace("/admin/login");
     }
-  }, [checking, hasSession, router]);
+  }, [checking, hasSession, error, router]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -68,10 +112,21 @@ export default function SetPasswordPage() {
     router.refresh();
   }
 
-  if (checking || !hasSession) {
+  if (!hasSession) {
     return (
       <section className="flex min-h-[70vh] items-center justify-center bg-paper-100 px-6 py-16">
-        <p className="text-sm text-ink-600">Memeriksa sesi...</p>
+        {error ? (
+          <div className="w-full max-w-sm text-center">
+            <p role="alert" className="text-sm font-medium text-red-600">
+              {error}
+            </p>
+            <a href="/admin/login" className="mt-4 inline-block text-sm font-semibold text-teal-700">
+              Kembali ke halaman masuk
+            </a>
+          </div>
+        ) : (
+          <p className="text-sm text-ink-600">Memeriksa sesi...</p>
+        )}
       </section>
     );
   }
