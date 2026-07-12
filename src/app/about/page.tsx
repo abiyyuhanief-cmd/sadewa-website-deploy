@@ -1,6 +1,17 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import {
+  Sprout,
+  Landmark,
+  Plane,
+  BookOpen,
+  Rocket,
+  Lightbulb,
+  Scale,
+  Handshake,
+  type LucideIcon,
+} from "lucide-react";
 import LeadForm from "@/components/lead-form";
 import { guimCumulativeStats } from "@/lib/guim-stats";
 
@@ -10,33 +21,39 @@ export const metadata: Metadata = {
     "Sejarah, misi, dan status badan hukum Sayap Dewantara Indonesia (Sadewa) — Perkumpulan yang diinisiasi alumni Gerakan UI Mengajar.",
 };
 
-const timeline = [
+const timeline: {
+  icon: LucideIcon;
+  tag: string;
+  title: string;
+  desc: string;
+  logo?: boolean;
+}[] = [
   {
-    icon: "🌱",
+    icon: Sprout,
     tag: "Titik awal — 2011",
     title: "GUIM 1 berangkat ke Garut",
     desc: "Gerakan UI Mengajar (GUIM) memulai jejak intervensi pendidikan dasar di Kabupaten Garut, Jawa Barat — cikal bakal garis keturunan langsung Sadewa hari ini.",
   },
   {
-    icon: "🏛️",
+    icon: Landmark,
     tag: "Kelahiran Sadewa",
     title: "Alumni GUIM mendirikan Perkumpulan",
     desc: "Agar kepedulian tidak berhenti saat masa penugasan kampus usai, sekelompok alumni GUIM mendirikan Sayap Dewantara Indonesia sebagai badan hukum Perkumpulan — wadah resmi untuk mewujudkan manfaat pendidikan yang berkelanjutan.",
   },
   {
-    icon: "✈️",
+    icon: Plane,
     tag: "Perluasan program",
     title: "Jelajah Dewantara dimulai",
     desc: "Delapan tahun lalu, Sadewa memperluas jangkauan lewat Jelajah Dewantara — program intervensi lintas daerah yang menjadi katalisator jejaring dan kemandirian pendidikan di wilayah sasaran GUIM.",
   },
   {
-    icon: "📚",
+    icon: BookOpen,
     tag: "10 Angkatan Pertama — Terdokumentasi",
     title: `${guimCumulativeStats.siswa.toLocaleString("id-ID")}+ siswa & ${guimCumulativeStats.guru.toLocaleString("id-ID")}+ guru terdampak`,
     desc: `Sepuluh angkatan pertama GUIM telah menjangkau ${guimCumulativeStats.sd} SD di ${guimCumulativeStats.desa} desa, ${guimCumulativeStats.kecamatan} kecamatan, ${guimCumulativeStats.kabupaten} kabupaten, dan ${guimCumulativeStats.provinsi} provinsi — rekam jejak yang kini bisa dibaca lengkap per angkatan di GUIM Story.`,
   },
   {
-    icon: "🚀",
+    icon: Rocket,
     tag: "Berlanjut",
     title: "GUIM Melangkah ke Angkatan 16",
     desc: "Estafet regenerasi pengajar terus berjalan jauh melampaui 10 angkatan pertama — GUIM 15 baru saja rampung dan GUIM 16 sedang berjalan. GUIM Story akan terus diperbarui seiring dokumentasi tiap angkatan baru selesai disusun.",
@@ -83,8 +100,8 @@ export default function AboutPage() {
         </div>
         <div className="relative mx-auto grid max-w-5xl gap-10 px-6 py-16 sm:grid-cols-[1fr_1fr]">
           <div>
-            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100 text-lg">
-              💡
+            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100">
+              <Lightbulb className="h-5 w-5 text-teal-700" aria-hidden strokeWidth={2} />
             </div>
             <h2 className="font-display text-2xl font-semibold text-ink-900">Kenapa Kami Ada</h2>
             <p className="mt-4 text-base leading-relaxed text-ink-700">
@@ -95,8 +112,8 @@ export default function AboutPage() {
             </p>
           </div>
           <div>
-            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100 text-lg">
-              ⚖️
+            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100">
+              <Scale className="h-5 w-5 text-teal-700" aria-hidden strokeWidth={2} />
             </div>
             <h2 className="font-display text-2xl font-semibold text-ink-900">Status Badan Hukum & Relasi dengan GUIM</h2>
             <p className="mt-4 text-base leading-relaxed text-ink-700">
@@ -112,7 +129,10 @@ export default function AboutPage() {
       {/* Wajah di balik Sadewa — humanisasi organisasi */}
       <section className="bg-paper-100">
         <div className="mx-auto max-w-5xl px-6 py-16">
-          <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">🤝 Wajah di Balik Sadewa</p>
+          <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-teal-600">
+            <Handshake className="h-4 w-4" aria-hidden strokeWidth={2} />
+            Wajah di Balik Sadewa
+          </p>
           <h2 className="mt-2 font-display text-3xl font-semibold text-ink-900 sm:text-4xl">
             Dijalankan oleh Alumni, untuk Keberlanjutan
           </h2>
@@ -159,8 +179,9 @@ export default function AboutPage() {
             {timeline.map((t) => (
               <li key={t.title} className="relative">
                 <span className="absolute -left-[38px] top-1 h-3 w-3 rounded-full bg-teal-400" />
-                <p className="text-xs font-bold uppercase tracking-wider text-teal-300">
-                  {t.icon} {t.tag}
+                <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-wider text-teal-300">
+                  <t.icon className="h-4 w-4" aria-hidden strokeWidth={2} />
+                  {t.tag}
                 </p>
                 <h3 className="mt-1 font-display text-xl font-semibold text-paper-50">{t.title}</h3>
                 <p className="mt-2 max-w-xl text-sm leading-relaxed text-ink-200">{t.desc}</p>

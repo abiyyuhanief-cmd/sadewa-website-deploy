@@ -33,6 +33,9 @@ export default async function AdminDashboardLayout({
               <Link href="/admin/cerita" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
                 Cerita
               </Link>
+              <Link href="/admin/leads" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+                Leads
+              </Link>
               <Link href="/admin/users" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
                 Users
               </Link>
@@ -56,6 +59,9 @@ export default async function AdminDashboardLayout({
           </Link>
           <Link href="/admin/cerita" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
             Cerita
+          </Link>
+          <Link href="/admin/leads" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+            Leads
           </Link>
           <Link href="/admin/users" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
             Users

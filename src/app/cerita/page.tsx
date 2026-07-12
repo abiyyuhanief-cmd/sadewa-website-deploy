@@ -1,13 +1,14 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
+import { Newspaper } from "lucide-react";
 import { getCeritaListing } from "@/lib/cerita-data";
 
 export const revalidate = 60;
 
 export const metadata: Metadata = {
   title: "Cerita — Sadewa",
-  description: "Kabar terkini kegiatan Sayap Dewantara Indonesia (Sadewa).",
+  description: "Cerita Kita - Sadewa & GUIM.",
 };
 
 function formatDate(iso: string | null) {
@@ -21,9 +22,12 @@ export default async function CeritaPage() {
   return (
     <section className="bg-paper-50">
       <div className="mx-auto max-w-6xl px-6 py-16 sm:py-20">
-        <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">📰 Cerita</p>
+        <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-teal-600">
+          <Newspaper className="h-4 w-4" aria-hidden strokeWidth={2} />
+          Cerita
+        </p>
         <h1 className="mt-2 font-display text-4xl font-semibold text-ink-900 sm:text-5xl">
-          Kabar Terkini Sadewa
+          Cerita Kita
         </h1>
 
         {articles.length === 0 ? (
@@ -42,7 +46,7 @@ export default async function CeritaPage() {
                   )}
                 </div>
                 <div className="p-5">
-                  <p className="text-xs text-ink-500">{formatDate(b.published_at)}</p>
+                  <p className="text-xs text-ink-600">{formatDate(b.published_at)}</p>
                   <h2 className="mt-1.5 font-display text-lg font-semibold text-ink-900 group-hover:text-teal-700">
                     {b.judul}
                   </h2>
