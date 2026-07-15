@@ -39,3 +39,9 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
+
+# supabase CLI local cache
+/supabase/.temp/
+
+# local-only working docs (not part of repo history)
+/docs/
