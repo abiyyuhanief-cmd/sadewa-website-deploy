@@ -5,6 +5,7 @@ import { getGuimStoryListing } from "@/lib/guim-story-data";
 import { guimCumulativeStats } from "@/lib/guim-stats";
 import GuimDataChart from "@/components/guim-data-chart";
 import GuimJalur from "@/components/guim-jalur";
+import GuimMap from "@/components/guim-map";
 import Reveal from "@/components/reveal";
 
 export const revalidate = 300;
@@ -55,6 +56,22 @@ export default async function CeritaGuimPage() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      <section className="bg-paper-50">
+        <div className="mx-auto max-w-6xl px-6 py-10 sm:py-12">
+          <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Peta Sebaran</p>
+          <h2 className="mt-2 font-display text-3xl font-semibold text-ink-900 sm:text-4xl">
+            Titik Aksi per Kabupaten
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm text-ink-600">
+            Sepuluh kabupaten yang sudah didokumentasikan lengkap di GUIM Story, plus lima kabupaten dari
+            angkatan yang lebih baru dan belum punya cerita lengkap di sini.
+          </p>
+          <Reveal delay={0.05} className="mt-6 rounded-[4px_24px_4px_24px] bg-paper-white p-4 shadow-xl sm:p-6">
+            <GuimMap />
+          </Reveal>
         </div>
       </section>
 

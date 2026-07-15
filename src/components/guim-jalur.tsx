@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { BookMarked } from "lucide-react";
+import { BookMarked, GraduationCap, School, Home } from "lucide-react";
 import type { GuimStory } from "@/lib/types";
 
 /**
@@ -42,18 +42,23 @@ export default function GuimJalur({ angkatanList }: { angkatanList: GuimStory[] 
           ? "md:ml-0 md:mr-auto md:pr-10"
           : "md:ml-auto md:pl-10";
         return (
-          <li key={a.id} className="relative pb-10 last:pb-0">
+          <li key={a.id} id={`angkatan-${a.angkatan}`} className="relative scroll-mt-24 pb-10 last:pb-0">
             {/* Node bernomor angkatan, duduk di atas spine. */}
-            <motion.span
+            <motion.div
               aria-hidden
               initial={reduce ? false : { scale: 0, opacity: 0 }}
               whileInView={{ scale: 1, opacity: 1 }}
               viewport={{ once: true, margin: "-40px" }}
               transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-              className="absolute left-[19px] top-1 z-10 flex h-10 w-10 -translate-x-1/2 items-center justify-center rounded-full border-2 border-teal-400 bg-ink-900 font-display text-sm font-semibold tabular-nums text-teal-300 shadow-lg md:left-1/2"
+              className="absolute left-[19px] top-1 z-10 flex h-12 w-12 -translate-x-1/2 flex-col items-center justify-center rounded-full border-2 border-teal-400 bg-gradient-to-b from-ink-800 to-ink-900 shadow-[0_0_0_4px_rgba(15,23,23,1),0_8px_20px_-4px_rgba(45,212,191,0.5)] md:left-1/2"
             >
-              {a.angkatan}
-            </motion.span>
+              <span className="font-display text-base font-bold leading-none tabular-nums text-teal-300">
+                {a.angkatan}
+              </span>
+              <span className="mt-0.5 text-[9px] font-semibold leading-none tabular-nums text-teal-400/80">
+                {a.tahun_pelaksanaan.match(/\d{4}/)?.[0] ?? ""}
+              </span>
+            </motion.div>
 
             <motion.div
               initial={reduce ? false : { opacity: 0, y: 18 }}
@@ -76,10 +81,24 @@ export default function GuimJalur({ angkatanList }: { angkatanList: GuimStory[] 
                 <p className="mt-1 text-sm text-ink-600">{a.tahun_pelaksanaan}</p>
                 <p className="mt-3 text-sm italic leading-relaxed text-ink-700">&ldquo;{a.tema}&rdquo;</p>
                 {a.jumlah_siswa != null && (
-                  <p className="mt-4 text-xs text-ink-600">
-                    {a.jumlah_siswa.toLocaleString("id-ID")} siswa &middot; {a.jumlah_sd} SD
-                    {a.jumlah_desa != null ? ` · ${a.jumlah_desa} desa` : ""}
-                  </p>
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    <span className="flex items-center gap-1.5 rounded-[4px_10px_4px_10px] bg-teal-50 px-2.5 py-1.5 text-xs font-semibold text-teal-700">
+                      <GraduationCap className="h-3.5 w-3.5" aria-hidden strokeWidth={2} />
+                      {a.jumlah_siswa.toLocaleString("id-ID")} siswa
+                    </span>
+                    {a.jumlah_sd != null && (
+                      <span className="flex items-center gap-1.5 rounded-[4px_10px_4px_10px] bg-gold-100 px-2.5 py-1.5 text-xs font-semibold text-gold-600">
+                        <School className="h-3.5 w-3.5" aria-hidden strokeWidth={2} />
+                        {a.jumlah_sd} SD
+                      </span>
+                    )}
+                    {a.jumlah_desa != null && (
+                      <span className="flex items-center gap-1.5 rounded-[4px_10px_4px_10px] bg-ink-100 px-2.5 py-1.5 text-xs font-semibold text-ink-700">
+                        <Home className="h-3.5 w-3.5" aria-hidden strokeWidth={2} />
+                        {a.jumlah_desa} desa
+                      </span>
+                    )}
+                  </div>
                 )}
               </Link>
             </motion.div>
