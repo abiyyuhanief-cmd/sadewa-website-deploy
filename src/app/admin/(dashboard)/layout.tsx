@@ -33,6 +33,9 @@ export default async function AdminDashboardLayout({
               <Link href="/admin/cerita" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
                 Cerita
               </Link>
+              <Link href="/admin/testimoni" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+                Testimoni
+              </Link>
               <Link href="/admin/leads" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
                 Leads
               </Link>
@@ -53,17 +56,20 @@ export default async function AdminDashboardLayout({
             </form>
           </div>
         </div>
-        <nav className="flex items-center gap-5 border-t border-paper-200 px-6 py-3 sm:hidden">
-          <Link href="/admin/cerita-guim" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+        <nav className="flex items-center gap-5 overflow-x-auto border-t border-paper-200 px-6 py-3 sm:hidden">
+          <Link href="/admin/cerita-guim" className="whitespace-nowrap text-sm font-semibold text-ink-700 hover:text-teal-700">
             GUIM Story
           </Link>
-          <Link href="/admin/cerita" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+          <Link href="/admin/cerita" className="whitespace-nowrap text-sm font-semibold text-ink-700 hover:text-teal-700">
             Cerita
           </Link>
-          <Link href="/admin/leads" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+          <Link href="/admin/testimoni" className="whitespace-nowrap text-sm font-semibold text-ink-700 hover:text-teal-700">
+            Testimoni
+          </Link>
+          <Link href="/admin/leads" className="whitespace-nowrap text-sm font-semibold text-ink-700 hover:text-teal-700">
             Leads
           </Link>
-          <Link href="/admin/users" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+          <Link href="/admin/users" className="whitespace-nowrap text-sm font-semibold text-ink-700 hover:text-teal-700">
             Users
           </Link>
         </nav>

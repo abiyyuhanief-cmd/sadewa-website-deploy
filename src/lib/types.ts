@@ -36,6 +36,16 @@ export type GuimStory = {
   updated_at: string;
 };
 
+export type GuimTestimoni = {
+  id: string;
+  guim_slug: string;
+  nama: string;
+  peran: string | null;
+  pesan: string;
+  status: "pending" | "published";
+  created_at: string;
+};
+
 export type Lead = {
   id: string;
   name: string;
