@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 
@@ -12,7 +13,15 @@ const links = [
   { href: "/cerita", label: "Cerita" },
 ];
 
+// "/" hanya aktif kalau persis di Home; selainnya juga aktif untuk halaman
+// turunannya (mis. /cerita-guim/guim-3 tetap menandai "GUIM Story").
+function isActiveLink(pathname: string, href: string): boolean {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(href + "/");
+}
+
 export default function Navbar() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const reduce = useReducedMotion();
@@ -46,19 +55,27 @@ export default function Navbar() {
           />
         </Link>
 
-        <nav className="hidden items-center gap-8 md:flex">
-          {links.map((l) => (
-            <Link
-              key={l.href}
-              href={l.href}
-              className="text-sm font-semibold text-ink-700 transition-colors hover:text-teal-700"
-            >
-              {l.label}
-            </Link>
-          ))}
+        <nav className="hidden items-center gap-1 md:flex">
+          {links.map((l) => {
+            const active = isActiveLink(pathname, l.href);
+            return (
+              <Link
+                key={l.href}
+                href={l.href}
+                aria-current={active ? "page" : undefined}
+                className={`rounded-full px-3.5 py-1.5 text-sm font-semibold transition-colors ${
+                  active
+                    ? "bg-teal-50 text-teal-700"
+                    : "text-ink-700 hover:text-teal-700"
+                }`}
+              >
+                {l.label}
+              </Link>
+            );
+          })}
           <Link
             href="/#daftar-minat"
-            className="rounded-[4px_20px_4px_20px] bg-teal-600 px-5 py-2.5 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700"
+            className="ml-3 rounded-[4px_20px_4px_20px] bg-teal-600 px-5 py-2.5 text-sm font-semibold text-paper-50 transition-colors hover:bg-teal-700"
           >
             Terhubung
           </Link>
@@ -92,16 +109,22 @@ export default function Navbar() {
             className="overflow-hidden border-t border-paper-200 bg-paper-50 md:hidden"
           >
             <div className="flex flex-col gap-1 px-6 py-4">
-              {links.map((l) => (
-                <Link
-                  key={l.href}
-                  href={l.href}
-                  onClick={() => setOpen(false)}
-                  className="rounded-lg px-2 py-3 text-base font-semibold text-ink-700 hover:bg-paper-100"
-                >
-                  {l.label}
-                </Link>
-              ))}
+              {links.map((l) => {
+                const active = isActiveLink(pathname, l.href);
+                return (
+                  <Link
+                    key={l.href}
+                    href={l.href}
+                    onClick={() => setOpen(false)}
+                    aria-current={active ? "page" : undefined}
+                    className={`rounded-lg px-2 py-3 text-base font-semibold transition-colors ${
+                      active ? "bg-teal-50 text-teal-700" : "text-ink-700 hover:bg-paper-100"
+                    }`}
+                  >
+                    {l.label}
+                  </Link>
+                );
+              })}
               <Link
                 href="/#daftar-minat"
                 onClick={() => setOpen(false)}
