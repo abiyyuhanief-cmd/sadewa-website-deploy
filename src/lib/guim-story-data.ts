@@ -1,13 +1,11 @@
 import { createClient } from "@supabase/supabase-js";
 import type { GuimStory } from "@/lib/types";
+import { SUPABASE_URL, SUPABASE_ANON_KEY } from "@/lib/env";
 
 // Publik, hanya baca konten published (RLS anon) — tidak pakai cookies, supaya
 // halaman /cerita-guim tetap statis/ISR (revalidate), bukan dipaksa dynamic.
 function publicClient() {
-  return createClient(
-    process.env.NEXT_PUBLIC_SUPABASE_URL ?? "",
-    process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY ?? ""
-  );
+  return createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 }
 
 export async function getGuimStorySlugs(): Promise<{ slug: string }[]> {

@@ -46,6 +46,10 @@ export type GuimTestimoni = {
   created_at: string;
 };
 
+// Testimoni + nama angkatan asalnya (join sisi aplikasi dengan guim_story),
+// dipakai untuk feed campuran lintas angkatan yang butuh tag "GUIM berapa".
+export type GuimTestimoniWithAngkatan = GuimTestimoni & { nama_angkatan: string };
+
 export type Lead = {
   id: string;
   name: string;

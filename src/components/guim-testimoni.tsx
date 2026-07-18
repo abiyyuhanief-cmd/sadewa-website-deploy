@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { AnimatePresence, motion, useReducedMotion } from "framer-motion";
 import { Quote } from "lucide-react";
-import type { GuimTestimoni } from "@/lib/types";
+import type { GuimTestimoniWithAngkatan } from "@/lib/types";
 
 /**
  * Testimoni alumni yang tampil "bergilir": satu kartu di layar, berganti
@@ -11,11 +11,14 @@ import type { GuimTestimoni } from "@/lib/types";
  * pembaca sempat menuntaskan. Titik navigasi memungkinkan pindah manual.
  * Hormati prefers-reduced-motion: auto-rotate & animasi dimatikan, testimoni
  * disusun sebagai daftar statis biar tetap terbaca semua.
+ *
+ * Feed-nya dicampur lintas angkatan (bukan difilter per slug) — tiap kartu
+ * diberi tag nama_angkatan biar tetap jelas testimoni itu dari GUIM berapa.
  */
 
 const INTERVAL = 3300;
 
-function Card({ t }: { t: GuimTestimoni }) {
+function Card({ t }: { t: GuimTestimoniWithAngkatan }) {
   return (
     <figure className="text-center">
       <Quote className="mx-auto h-7 w-7 text-teal-300" aria-hidden strokeWidth={2} />
@@ -25,12 +28,17 @@ function Card({ t }: { t: GuimTestimoni }) {
       <figcaption className="mt-4 text-sm">
         <span className="font-semibold text-ink-900">{t.nama}</span>
         {t.peran && <span className="text-ink-500"> · {t.peran}</span>}
+        <span className="mt-2 block">
+          <span className="inline-block rounded-full bg-teal-50 px-2.5 py-0.5 text-xs font-semibold text-teal-700">
+            {t.nama_angkatan}
+          </span>
+        </span>
       </figcaption>
     </figure>
   );
 }
 
-export default function GuimTestimoni({ items }: { items: GuimTestimoni[] }) {
+export default function GuimTestimoni({ items }: { items: GuimTestimoniWithAngkatan[] }) {
   const reduce = useReducedMotion();
   const [i, setI] = useState(0);
   const [paused, setPaused] = useState(false);

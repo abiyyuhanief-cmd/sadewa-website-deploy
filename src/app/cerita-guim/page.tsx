@@ -1,11 +1,13 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { GraduationCap, Presentation, School, MapPin } from "lucide-react";
+import { GraduationCap, Presentation, School, MapPin, MessageCircleHeart } from "lucide-react";
 import { getGuimStoryListing } from "@/lib/guim-story-data";
+import { getAllTestimoni } from "@/lib/guim-testimoni-data";
 import { guimCumulativeStats } from "@/lib/guim-stats";
 import GuimDataChart from "@/components/guim-data-chart";
 import GuimJalur from "@/components/guim-jalur";
 import GuimMap from "@/components/guim-map";
+import GuimTestimoni from "@/components/guim-testimoni";
 import Reveal from "@/components/reveal";
 
 export const revalidate = 300;
@@ -18,6 +20,7 @@ export const metadata: Metadata = {
 
 export default async function CeritaGuimPage() {
   const angkatanList = await getGuimStoryListing();
+  const testimoni = await getAllTestimoni();
 
   return (
     <>
@@ -92,6 +95,25 @@ export default async function CeritaGuimPage() {
           <GuimJalur angkatanList={angkatanList} />
         </div>
       </section>
+
+      {testimoni.length > 0 && (
+        <section className="bg-paper-50">
+          <div className="mx-auto max-w-6xl px-6 py-14 sm:py-16">
+            <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Cerita Alumni</p>
+            <h2 className="mt-2 flex items-center gap-2.5 font-display text-3xl font-semibold text-ink-900 sm:text-4xl">
+              <MessageCircleHeart className="h-7 w-7 shrink-0 text-teal-600" aria-hidden strokeWidth={2} />
+              Suara Alumni
+            </h2>
+            <p className="mt-3 max-w-2xl text-sm text-ink-600">
+              Kenangan lintas angkatan GUIM. Alumni salah satu angkatan? Tulis ceritamu di halaman
+              detail angkatanmu masing-masing.
+            </p>
+            <Reveal delay={0.05} className="mx-auto mt-8 max-w-2xl">
+              <GuimTestimoni items={testimoni} />
+            </Reveal>
+          </div>
+        </section>
+      )}
 
       <section className="relative overflow-hidden bg-ink-900">
         <Image

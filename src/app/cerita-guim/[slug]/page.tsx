@@ -17,7 +17,7 @@ import {
   getGuimStorySlugs,
   getGuimStoryNav,
 } from "@/lib/guim-story-data";
-import { getTestimoniBySlug } from "@/lib/guim-testimoni-data";
+import { getAllTestimoni } from "@/lib/guim-testimoni-data";
 import GuimTimeline from "@/components/guim-timeline";
 import GuimBubbles from "@/components/guim-bubbles";
 import GuimTitikAwan from "@/components/guim-titik-awan";
@@ -64,7 +64,7 @@ export default async function CeritaGuimDetailPage({
   const a = await getGuimStoryBySlug(slug);
   if (!a) notFound();
   const { prev, next } = await getGuimStoryNav(slug);
-  const testimoni = await getTestimoniBySlug(slug);
+  const testimoni = await getAllTestimoni();
 
   const stats = [
     { label: "Panitia", value: a.jumlah_panitia, icon: Users },
@@ -208,8 +208,8 @@ export default async function CeritaGuimDetailPage({
             <GuimTestimoniShare namaAngkatan={a.nama_angkatan} />
           </div>
           <p className="mt-2 max-w-xl text-sm text-ink-600">
-            Kamu bagian dari {a.nama_angkatan}? Tinggalkan kenangan atau kesanmu — cerita yang
-            terpilih akan tampil di sini.
+            Kenangan dari alumni lintas angkatan GUIM. Kamu bagian dari {a.nama_angkatan}? Tinggalkan
+            kenangan atau kesanmu di bawah — cerita yang terpilih akan tampil di sini.
           </p>
 
           {testimoni.length > 0 && (
