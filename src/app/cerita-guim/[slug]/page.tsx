@@ -25,11 +25,20 @@ import GuimStoryNav from "@/components/guim-story-nav";
 import GuimTestimoni from "@/components/guim-testimoni";
 import GuimTestimoniForm from "@/components/guim-testimoni-form";
 import GuimTestimoniShare from "@/components/guim-testimoni-share";
+import JsonLd from "@/components/json-ld";
+import { absoluteUrl, buildMetadata, SITE_URL } from "@/lib/site";
 
 export const revalidate = 300;
 
 export async function generateStaticParams() {
   return getGuimStorySlugs();
+}
+
+/** Potong di batas kata supaya deskripsi tidak terputus di tengah kata. */
+function truncate(text: string, max: number) {
+  const clean = text.replace(/\s+/g, " ").trim();
+  if (clean.length <= max) return clean;
+  return `${clean.slice(0, clean.lastIndexOf(" ", max - 1))}…`;
 }
 
 export async function generateMetadata({
@@ -39,11 +48,25 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const angkatan = await getGuimStoryBySlug(slug);
+  // Slug tidak dikenal → halaman 404, metadata default saja.
   if (!angkatan) return {};
-  return {
-    title: `${angkatan.nama_angkatan} — GUIM Story — Sadewa`,
-    description: `${angkatan.kabupaten}, ${angkatan.provinsi} · ${angkatan.tahun_pelaksanaan} · ${angkatan.tema}`,
-  };
+
+  // Deskripsi memuat nama angkatan + lokasi + tahun: kata kunci yang benar-benar
+  // dicari orang ("GUIM 11 Ngluyu", "Gerakan UI Mengajar Nganjuk 2023").
+  // Dipotong ~155 karakter karena segitu yang ditampilkan Google.
+  const description = truncate(
+    `${angkatan.nama_angkatan} — Gerakan UI Mengajar di ${angkatan.kabupaten}, ${angkatan.provinsi} (${angkatan.tahun_pelaksanaan}). Tema: ${angkatan.tema}. ${angkatan.gambaran_umum}`,
+    155
+  );
+
+  return buildMetadata({
+    title: `${angkatan.nama_angkatan} — ${angkatan.kabupaten}`,
+    description,
+    path: `/cerita-guim/${angkatan.slug}`,
+    image: absoluteUrl("/gallery/guim-story-hero.jpg"),
+    type: "article",
+    modifiedTime: angkatan.updated_at,
+  });
 }
 
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
@@ -76,8 +99,55 @@ export default async function CeritaGuimDetailPage({
     { label: "Kecamatan", value: a.jumlah_kecamatan, icon: MapPin },
   ].filter((s) => s.value != null);
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: `${a.nama_angkatan} — Gerakan UI Mengajar di ${a.kabupaten}, ${a.provinsi}`,
+    description: a.gambaran_umum,
+    image: [absoluteUrl("/gallery/guim-story-hero.jpg")],
+    dateModified: a.updated_at,
+    datePublished: a.created_at,
+    author: { "@id": `${SITE_URL}/#organization` },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    mainEntityOfPage: absoluteUrl(`/cerita-guim/${a.slug}`),
+    inLanguage: "id-ID",
+    // Sinyal geografis: membantu pencarian bernuansa lokal.
+    contentLocation: {
+      "@type": "Place",
+      name: `${a.kabupaten}, ${a.provinsi}`,
+      address: {
+        "@type": "PostalAddress",
+        addressLocality: a.kabupaten,
+        addressRegion: a.provinsi,
+        addressCountry: "ID",
+      },
+    },
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Beranda", item: SITE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "GUIM Story",
+        item: absoluteUrl("/cerita-guim"),
+      },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: a.nama_angkatan,
+        item: absoluteUrl(`/cerita-guim/${a.slug}`),
+      },
+    ],
+  };
+
   return (
     <>
+      <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <section className="relative overflow-hidden border-b border-paper-200 bg-ink-900 text-paper-50">
         {/* Awan dekoratif tipis di latar hero */}
         <svg

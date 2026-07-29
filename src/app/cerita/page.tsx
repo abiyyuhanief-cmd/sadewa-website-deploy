@@ -5,13 +5,16 @@ import { Newspaper } from "lucide-react";
 import { getCeritaListing } from "@/lib/cerita-data";
 import Reveal from "@/components/reveal";
 import CeritaComingSoon from "@/components/cerita-coming-soon";
+import { buildMetadata } from "@/lib/site";
 
 export const revalidate = 60;
 
-export const metadata: Metadata = {
-  title: "Cerita — Sadewa",
-  description: "Cerita Kita - Sadewa & GUIM.",
-};
+export const metadata: Metadata = buildMetadata({
+  title: "Cerita",
+  description:
+    "Kumpulan cerita, catatan lapangan, dan kabar terbaru dari Sadewa dan alumni Gerakan UI Mengajar.",
+  path: "/cerita",
+});
 
 function formatDate(iso: string | null) {
   if (!iso) return "";
