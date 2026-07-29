@@ -4,6 +4,7 @@ import "./globals.css";
 import Navbar from "@/components/navbar";
 import Footer from "@/components/footer";
 import PageTransition from "@/components/page-transition";
+import AnalyticsTracker from "@/components/analytics-tracker";
 import {
   IS_PRODUCTION_SITE,
   SITE_DESCRIPTION,
@@ -103,6 +104,7 @@ export default function RootLayout({
           <PageTransition>{children}</PageTransition>
         </main>
         <Footer />
+        <AnalyticsTracker />
       </body>
     </html>
   );
