@@ -42,6 +42,9 @@ export default async function AdminDashboardLayout({
               <Link href="/admin/users" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
                 Users
               </Link>
+              <Link href="/admin/analytics" className="text-sm font-semibold text-ink-700 hover:text-teal-700">
+                Analytics
+              </Link>
             </nav>
           </div>
           <div className="flex items-center gap-4">
@@ -71,6 +74,9 @@ export default async function AdminDashboardLayout({
           </Link>
           <Link href="/admin/users" className="whitespace-nowrap text-sm font-semibold text-ink-700 hover:text-teal-700">
             Users
+          </Link>
+          <Link href="/admin/analytics" className="whitespace-nowrap text-sm font-semibold text-ink-700 hover:text-teal-700">
+            Analytics
           </Link>
         </nav>
       </header>
