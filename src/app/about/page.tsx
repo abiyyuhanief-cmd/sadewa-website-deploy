@@ -15,12 +15,14 @@ import {
 import LeadForm from "@/components/lead-form";
 import Reveal from "@/components/reveal";
 import { guimCumulativeStats } from "@/lib/guim-stats";
+import { buildMetadata } from "@/lib/site";
 
-export const metadata: Metadata = {
-  title: "Tentang Kami — Sadewa",
+export const metadata: Metadata = buildMetadata({
+  title: "Tentang Kami",
   description:
     "Sejarah, misi, dan status badan hukum Sayap Dewantara Indonesia (Sadewa) — Perkumpulan yang diinisiasi alumni Gerakan UI Mengajar.",
-};
+  path: "/about",
+});
 
 const timeline: {
   icon: LucideIcon;

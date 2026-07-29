@@ -3,6 +3,8 @@ import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getCeritaBySlug, getCeritaSlugs } from "@/lib/cerita-data";
+import JsonLd from "@/components/json-ld";
+import { absoluteUrl, buildMetadata, SITE_TITLE, SITE_URL } from "@/lib/site";
 
 export const revalidate = 60;
 
@@ -17,11 +19,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   const b = await getCeritaBySlug(slug);
+  // Slug tidak dikenal → halaman 404, metadata default saja.
   if (!b) return {};
-  return {
-    title: `${b.judul} — Cerita — Sadewa`,
-    description: b.ringkasan ?? undefined,
-  };
+  return buildMetadata({
+    title: b.judul,
+    description: b.ringkasan ?? `Cerita dari Sadewa: ${b.judul}.`,
+    path: `/cerita/${b.slug}`,
+    image: b.gambar_utama_url,
+    type: "article",
+    publishedTime: b.published_at,
+    modifiedTime: b.updated_at,
+  });
 }
 
 function formatDate(iso: string | null) {
@@ -38,8 +46,39 @@ export default async function CeritaDetailPage({
   const b = await getCeritaBySlug(slug);
   if (!b) notFound();
 
+  const articleSchema = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    headline: b.judul,
+    description: b.ringkasan ?? undefined,
+    image: b.gambar_utama_url ? [b.gambar_utama_url] : [absoluteUrl("/og-default.jpg")],
+    datePublished: b.published_at ?? b.created_at,
+    dateModified: b.updated_at,
+    author: { "@type": b.penulis ? "Person" : "Organization", name: b.penulis ?? SITE_TITLE },
+    publisher: { "@id": `${SITE_URL}/#organization` },
+    mainEntityOfPage: absoluteUrl(`/cerita/${b.slug}`),
+    inLanguage: "id-ID",
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Beranda", item: SITE_URL },
+      { "@type": "ListItem", position: 2, name: "Cerita", item: absoluteUrl("/cerita") },
+      {
+        "@type": "ListItem",
+        position: 3,
+        name: b.judul,
+        item: absoluteUrl(`/cerita/${b.slug}`),
+      },
+    ],
+  };
+
   return (
     <article className="bg-paper-50">
+      <JsonLd data={articleSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <div className="mx-auto max-w-3xl px-6 py-14 sm:py-18">
         <Link href="/cerita" className="text-xs font-semibold text-teal-700 hover:text-teal-800">
           ← Semua Cerita

@@ -9,21 +9,57 @@ import GuimJalur from "@/components/guim-jalur";
 import GuimMap from "@/components/guim-map";
 import GuimTestimoni from "@/components/guim-testimoni";
 import Reveal from "@/components/reveal";
+import JsonLd from "@/components/json-ld";
+import { absoluteUrl, buildMetadata, SITE_URL } from "@/lib/site";
 
 export const revalidate = 300;
 
-export const metadata: Metadata = {
-  title: "GUIM Story — Sadewa",
+export const metadata: Metadata = buildMetadata({
+  title: "GUIM Story",
   description:
     "Rekam jejak 10 angkatan Gerakan UI Mengajar (GUIM) — dari Garut hingga Pesisir Barat, satu dekade intervensi pendidikan dasar di pelosok Indonesia.",
-};
+  path: "/cerita-guim",
+  image: absoluteUrl("/gallery/guim-story-hero.jpg"),
+});
 
 export default async function CeritaGuimPage() {
   const angkatanList = await getGuimStoryListing();
   const testimoni = await getAllTestimoni();
 
+  // Daftar angkatan sebagai ItemList: membantu mesin pencari mengenali halaman
+  // ini sebagai indeks, dan membuka peluang sitelinks ke tiap angkatan.
+  const itemListSchema = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Angkatan Gerakan UI Mengajar",
+    itemListOrder: "https://schema.org/ItemListOrderAscending",
+    numberOfItems: angkatanList.length,
+    itemListElement: angkatanList.map((a, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: `${a.nama_angkatan} — ${a.kabupaten}, ${a.provinsi}`,
+      url: absoluteUrl(`/cerita-guim/${a.slug}`),
+    })),
+  };
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: [
+      { "@type": "ListItem", position: 1, name: "Beranda", item: SITE_URL },
+      {
+        "@type": "ListItem",
+        position: 2,
+        name: "GUIM Story",
+        item: absoluteUrl("/cerita-guim"),
+      },
+    ],
+  };
+
   return (
     <>
+      <JsonLd data={itemListSchema} />
+      <JsonLd data={breadcrumbSchema} />
       <section className="relative overflow-hidden bg-ink-900 text-paper-50">
         <Image
           src="/gallery/guim-story-hero.jpg"

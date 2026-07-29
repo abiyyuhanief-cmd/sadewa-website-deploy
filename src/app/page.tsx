@@ -5,6 +5,53 @@ import StatCounter from "@/components/stat-counter";
 import LeadForm from "@/components/lead-form";
 import Reveal from "@/components/reveal";
 import Gallery from "@/components/gallery";
+import JsonLd from "@/components/json-ld";
+import {
+  absoluteUrl,
+  buildMetadata,
+  SITE_DESCRIPTION,
+  SITE_TITLE,
+  SITE_URL,
+} from "@/lib/site";
+
+export const metadata = buildMetadata({
+  title: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  path: "/",
+});
+
+// Profil organisasi untuk knowledge panel & hasil pencarian bermerek.
+const organizationSchema = {
+  "@context": "https://schema.org",
+  "@type": "NGO",
+  "@id": `${SITE_URL}/#organization`,
+  name: "Sayap Dewantara Indonesia",
+  alternateName: ["Sadewa", "Sadewa Indonesia"],
+  url: SITE_URL,
+  logo: absoluteUrl("/brand/logo-horizontal.png"),
+  image: absoluteUrl("/og-default.jpg"),
+  description: SITE_DESCRIPTION,
+  slogan: "#DedikasiUntukEdukasi",
+  foundingLocation: { "@type": "Place", name: "Indonesia" },
+  areaServed: { "@type": "Country", name: "Indonesia" },
+  sameAs: ["https://www.instagram.com/sadewaind"],
+  knowsAbout: [
+    "Pendidikan dasar",
+    "Relawan pendidikan",
+    "Gerakan UI Mengajar",
+  ],
+};
+
+const websiteSchema = {
+  "@context": "https://schema.org",
+  "@type": "WebSite",
+  "@id": `${SITE_URL}/#website`,
+  url: SITE_URL,
+  name: SITE_TITLE,
+  description: SITE_DESCRIPTION,
+  inLanguage: "id-ID",
+  publisher: { "@id": `${SITE_URL}/#organization` },
+};
 
 const programs = [
   {
@@ -27,6 +74,9 @@ const programs = [
 export default function HomePage() {
   return (
     <>
+      <JsonLd data={organizationSchema} />
+      <JsonLd data={websiteSchema} />
+
       {/* Hero — FR-001 */}
       <section className="relative overflow-hidden bg-ink-900 text-paper-50">
         <Image
