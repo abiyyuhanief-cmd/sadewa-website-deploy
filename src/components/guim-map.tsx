@@ -20,11 +20,14 @@ import { guimLocations, type GuimLocation } from "@/lib/guim-locations";
  * belakang), lalu SEMUA label di lapisan teratas supaya tak ada pin yang
  * menutupi teks. Label pakai Figtree (font body situs).
  *
- * Pin angkatan yang sudah terdokumentasi (1-10) bisa diklik — scroll halus ke
- * kartu angkatan yang bersangkutan di section "Pilih Angkatan untuk Cerita
- * Lengkap" (GuimJalur, yang tiap <li>-nya diberi id="angkatan-{n}"). Untuk
- * kabupaten gabungan seperti "9, 10" dituju angkatan pertama yang disebut.
- * Pin angkatan baru (11-15) belum punya kartu untuk dituju, jadi klik hanya
+ * Pin angkatan yang sudah terdokumentasi (published di tabel guim_story) bisa
+ * diklik — scroll halus ke kartu angkatan yang bersangkutan di section "Pilih
+ * Angkatan untuk Cerita Lengkap" (GuimJalur, yang tiap <li>-nya diberi
+ * id="angkatan-{n}"). Untuk kabupaten gabungan seperti "9, 10" dituju angkatan
+ * pertama yang disebut. Status terdokumentasi dihitung dari `documentedAngkatan`
+ * (dikirim dari halaman, berasal dari getGuimStoryListing) — bukan hardcoded —
+ * supaya begitu angkatan baru terbit di GUIM Story pinnya otomatis jadi bisa
+ * diklik tanpa perlu ubah kode. Pin yang angkatannya belum published hanya
  * menampilkan info di panel bawah (sama seperti hover/fokus).
  */
 
@@ -53,13 +56,38 @@ function scrollToAngkatan(angkatan: string) {
   });
 }
 
+// Angka-angka angkatan yang disebut sebuah lokasi, mis. "9, 10" -> [9, 10].
+function angkatanNumbers(angkatan: string): number[] {
+  return angkatan.split(",").map((n) => Number(n.trim())).filter((n) => !Number.isNaN(n));
+}
+
+// "1, 2, 3, 5" -> "1–3, 5" — ringkas rentang berurutan supaya legenda tetap
+// pendek walau jumlah angkatan yang (belum) terdokumentasi terus bertambah.
+function formatRanges(nums: number[]): string {
+  const sorted = [...new Set(nums)].sort((a, b) => a - b);
+  const parts: string[] = [];
+  let start = sorted[0];
+  let prev = sorted[0];
+  for (let i = 1; i <= sorted.length; i++) {
+    const cur = sorted[i];
+    if (cur === prev + 1) {
+      prev = cur;
+      continue;
+    }
+    parts.push(start === prev ? `${start}` : `${start}–${prev}`);
+    start = cur;
+    prev = cur;
+  }
+  return parts.join(", ");
+}
+
 function labelFontStyle() {
   return {
     fontFamily: "var(--font-body), ui-sans-serif, system-ui, sans-serif",
   } as const;
 }
 
-function PinBody({ loc, active }: { loc: GuimLocation; active: boolean }) {
+function PinBody({ loc, active, documented }: { loc: GuimLocation; active: boolean; documented: boolean }) {
   const x = (loc.xPct / 100) * VB_W;
   const y = (loc.yPct / 100) * VB_H;
   const headY = y - HEAD_DY;
@@ -75,13 +103,13 @@ function PinBody({ loc, active }: { loc: GuimLocation; active: boolean }) {
           cy={-19.5}
           r={15}
           fill="none"
-          stroke={loc.documented ? "var(--teal-300)" : "var(--gold-500)"}
+          stroke={documented ? "var(--teal-300)" : "var(--gold-500)"}
           strokeWidth={2}
           opacity={0.9}
         />
       )}
       {/* Halo putus-putus untuk angkatan yang belum terdokumentasi */}
-      {!loc.documented && (
+      {!documented && (
         <circle
           cx={0}
           cy={-19.5}
@@ -95,8 +123,8 @@ function PinBody({ loc, active }: { loc: GuimLocation; active: boolean }) {
       {/* Badan teardrop + gloss */}
       <path
         d={PIN_PATH}
-        fill={loc.documented ? "url(#guim-pin-teal)" : "url(#guim-pin-gold)"}
-        stroke={loc.documented ? "var(--teal-800)" : "var(--gold-600)"}
+        fill={documented ? "url(#guim-pin-teal)" : "url(#guim-pin-gold)"}
+        stroke={documented ? "var(--teal-800)" : "var(--gold-600)"}
         strokeWidth={1}
         filter="url(#guim-pin-shadow)"
       />
@@ -110,11 +138,11 @@ function PinBody({ loc, active }: { loc: GuimLocation; active: boolean }) {
   );
 }
 
-function PinLabel({ loc }: { loc: GuimLocation }) {
+function PinLabel({ loc, documented }: { loc: GuimLocation; documented: boolean }) {
   const x = (loc.xPct / 100) * VB_W;
   const y = (loc.yPct / 100) * VB_H;
   const headY = y - HEAD_DY;
-  const label = loc.documented ? loc.kabupaten : `“${loc.kabupaten}”`;
+  const label = documented ? loc.kabupaten : `“${loc.kabupaten}”`;
   const labelY = headY - 7 + (loc.labelDy ?? 0);
 
   return (
@@ -124,7 +152,7 @@ function PinLabel({ loc }: { loc: GuimLocation }) {
       textAnchor={loc.labelAnchor ?? "middle"}
       fontSize={12.5}
       fontWeight={700}
-      fontStyle={loc.documented ? "normal" : "italic"}
+      fontStyle={documented ? "normal" : "italic"}
       style={labelFontStyle()}
       fill="var(--ink-900)"
       stroke="var(--paper-white)"
@@ -137,10 +165,19 @@ function PinLabel({ loc }: { loc: GuimLocation }) {
   );
 }
 
-export default function GuimMap() {
+export default function GuimMap({ documentedAngkatan }: { documentedAngkatan: number[] }) {
   const [active, setActive] = useState<GuimLocation | null>(null);
+  const docSet = new Set(documentedAngkatan);
+  const isDocumented = (loc: GuimLocation) => docSet.has(Number(firstAngkatan(loc.angkatan)));
   // Badan pin diurut utara→selatan supaya yang lebih "depan" menimpa yang belakang.
   const byDepth = [...guimLocations].sort((a, b) => a.yPct - b.yPct);
+
+  const documentedNums = guimLocations
+    .flatMap((loc) => angkatanNumbers(loc.angkatan))
+    .filter((n) => docSet.has(n));
+  const undocumentedNums = guimLocations
+    .flatMap((loc) => angkatanNumbers(loc.angkatan))
+    .filter((n) => !docSet.has(n));
 
   return (
     <div className="w-full">
@@ -178,37 +215,40 @@ export default function GuimMap() {
           </defs>
 
           {/* Lapis 1: badan pin (interaktif), urut kedalaman */}
-          {byDepth.map((loc) => (
-            <g
-              key={loc.kabupaten + loc.angkatan}
-              tabIndex={0}
-              role="button"
-              aria-label={`${loc.kabupaten}, ${loc.provinsi} — GUIM angkatan ${loc.angkatan}${
-                loc.documented ? ", klik untuk buka cerita lengkap" : " (belum ada di GUIM Story)"
-              }`}
-              onMouseEnter={() => setActive(loc)}
-              onMouseLeave={() => setActive(null)}
-              onFocus={() => setActive(loc)}
-              onBlur={() => setActive(null)}
-              onClick={() => {
-                setActive(loc);
-                if (loc.documented) scrollToAngkatan(loc.angkatan);
-              }}
-              onKeyDown={(e) => {
-                if (loc.documented && (e.key === "Enter" || e.key === " ")) {
-                  e.preventDefault();
-                  scrollToAngkatan(loc.angkatan);
-                }
-              }}
-              className="cursor-pointer outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-400"
-            >
-              <PinBody loc={loc} active={active === loc} />
-            </g>
-          ))}
+          {byDepth.map((loc) => {
+            const documented = isDocumented(loc);
+            return (
+              <g
+                key={loc.kabupaten + loc.angkatan}
+                tabIndex={0}
+                role="button"
+                aria-label={`${loc.kabupaten}, ${loc.provinsi} — GUIM angkatan ${loc.angkatan}${
+                  documented ? ", klik untuk buka cerita lengkap" : " (belum ada di GUIM Story)"
+                }`}
+                onMouseEnter={() => setActive(loc)}
+                onMouseLeave={() => setActive(null)}
+                onFocus={() => setActive(loc)}
+                onBlur={() => setActive(null)}
+                onClick={() => {
+                  setActive(loc);
+                  if (documented) scrollToAngkatan(loc.angkatan);
+                }}
+                onKeyDown={(e) => {
+                  if (documented && (e.key === "Enter" || e.key === " ")) {
+                    e.preventDefault();
+                    scrollToAngkatan(loc.angkatan);
+                  }
+                }}
+                className="cursor-pointer outline-none focus-visible:outline focus-visible:outline-2 focus-visible:outline-teal-400"
+              >
+                <PinBody loc={loc} active={active === loc} documented={documented} />
+              </g>
+            );
+          })}
 
           {/* Lapis 2: semua label, selalu di atas semua pin */}
           {guimLocations.map((loc) => (
-            <PinLabel key={loc.kabupaten + loc.angkatan} loc={loc} />
+            <PinLabel key={loc.kabupaten + loc.angkatan} loc={loc} documented={isDocumented(loc)} />
           ))}
         </svg>
       </div>
@@ -220,7 +260,7 @@ export default function GuimMap() {
               {active.kabupaten}, {active.provinsi}
             </span>{" "}
             — GUIM angkatan {active.angkatan}
-            {active.documented ? (
+            {isDocumented(active) ? (
               <span className="ml-1.5 text-xs font-semibold text-teal-600">Klik pin untuk buka cerita lengkap →</span>
             ) : (
               <span className="ml-1.5 rounded-full bg-gold-100 px-2 py-0.5 text-xs font-semibold text-gold-600">
@@ -240,18 +280,20 @@ export default function GuimMap() {
             className="inline-block h-2.5 w-2.5 rounded-full border"
             style={{ background: "var(--teal-500)", borderColor: "var(--teal-800)" }}
           />
-          Terdokumentasi lengkap di GUIM Story (angkatan 1–10)
+          Terdokumentasi lengkap di GUIM Story (angkatan {formatRanges(documentedNums) || "-"})
         </span>
-        <span className="flex items-center gap-1.5">
-          <span
-            aria-hidden
-            className="inline-flex h-4 w-4 items-center justify-center rounded-full border-2 border-dashed"
-            style={{ borderColor: "var(--gold-600)" }}
-          >
-            <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--gold-500)" }} />
+        {undocumentedNums.length > 0 && (
+          <span className="flex items-center gap-1.5">
+            <span
+              aria-hidden
+              className="inline-flex h-4 w-4 items-center justify-center rounded-full border-2 border-dashed"
+              style={{ borderColor: "var(--gold-600)" }}
+            >
+              <span className="h-1.5 w-1.5 rounded-full" style={{ background: "var(--gold-500)" }} />
+            </span>
+            &ldquo;Angkatan {formatRanges(undocumentedNums)}&rdquo;--belum ada di GUIM Story
           </span>
-          &ldquo;Angkatan (11–15)&rdquo;--belum ada di GUIM Story
-        </span>
+        )}
       </div>
       <p className="mt-2 text-[11px] text-ink-500">
         Latar peta adalah ilustrasi 3D, bukan peta geografis presisi.
@@ -274,7 +316,7 @@ export default function GuimMap() {
               <td>{loc.kabupaten}</td>
               <td>{loc.provinsi}</td>
               <td>{loc.angkatan}</td>
-              <td>{loc.documented ? "Terdokumentasi lengkap" : "Belum ada di GUIM Story"}</td>
+              <td>{isDocumented(loc) ? "Terdokumentasi lengkap" : "Belum ada di GUIM Story"}</td>
             </tr>
           ))}
         </tbody>

@@ -4,8 +4,11 @@
 // dari occupancy grid piksel), bukan koordinat GPS asli — urutan relatif
 // barat→timur di Jawa dan lokasi Lampung di Sumatra tetap dipertahankan.
 //
-// `documented: true` = sudah ada di tabel guim_story (angkatan 1-10). `false` =
-// angkatan 11-15, data statis internal Sayap Dewantara (tak sinkron dengan DB).
+// Posisi pin di sini statis (tak bisa datang dari DB), tapi status
+// "documented" (sudah punya cerita lengkap di tabel guim_story atau belum)
+// TIDAK di-hardcode di sini — dihitung di GuimMap dari data angkatan yang
+// benar-benar published, supaya begitu angkatan baru terbit di GUIM Story,
+// pinnya otomatis jadi bisa diklik tanpa perlu ubah file ini.
 //
 // Label West Java yang padat dipisah dua baris: pantai utara diberi labelDy
 // negatif (label di atas pin) dan pantai selatan labelDy positif besar (label
@@ -16,7 +19,6 @@ export type GuimLocation = {
   kabupaten: string;
   provinsi: string;
   angkatan: string;
-  documented: boolean;
   /** Posisi persen dari lebar gambar (0-100), titik tumpu pin. */
   xPct: number;
   /** Posisi persen dari tinggi gambar (0-100), titik tumpu pin. */
@@ -35,22 +37,22 @@ export type GuimLocation = {
 // alih-alih menaksir ulang manual.
 export const guimLocations: GuimLocation[] = [
   // — Sumatra (Lampung) —
-  { kabupaten: "Pesisir Barat", provinsi: "Lampung", angkatan: "9, 10", documented: true, xPct: 34, yPct: 46.8, labelAnchor: "end", labelDx: -6 },
-  { kabupaten: "Pesawaran", provinsi: "Lampung", angkatan: "13", documented: false, xPct: 44, yPct: 57, labelAnchor: "start", labelDx: 10, labelDy: 2 },
+  { kabupaten: "Pesisir Barat", provinsi: "Lampung", angkatan: "9, 10", xPct: 34, yPct: 46.8, labelAnchor: "end", labelDx: -6 },
+  { kabupaten: "Pesawaran", provinsi: "Lampung", angkatan: "13", xPct: 44, yPct: 57, labelAnchor: "start", labelDx: 10, labelDy: 2 },
 
   // — Jawa Barat (padat: label utara di-stagger dua tingkat, selatan di bawah pulau) —
-  { kabupaten: "Pandeglang", provinsi: "Banten", angkatan: "2", documented: true, xPct: 52, yPct: 71.5, labelAnchor: "end", labelDx: -8, labelDy: 6 },
-  { kabupaten: "Sukabumi", provinsi: "Jawa Barat", angkatan: "4", documented: true, xPct: 54.5, yPct: 69.7, labelDy: 54 },
-  { kabupaten: "Sumedang", provinsi: "Jawa Barat", angkatan: "11", documented: false, xPct: 57.5, yPct: 71.5, labelDy: -4 },
-  { kabupaten: "Garut", provinsi: "Jawa Barat", angkatan: "1", documented: true, xPct: 60, yPct: 70.1, labelDy: 54 },
-  { kabupaten: "Indramayu", provinsi: "Jawa Barat", angkatan: "3", documented: true, xPct: 62, yPct: 69.7, labelDy: -20 },
-  { kabupaten: "Cirebon", provinsi: "Jawa Barat", angkatan: "15", documented: false, xPct: 64.5, yPct: 70.8, labelAnchor: "start", labelDx: 8, labelDy: -3 },
-  { kabupaten: "Pangandaran", provinsi: "Jawa Barat", angkatan: "7", documented: true, xPct: 67, yPct: 69.6, labelDy: 54 },
+  { kabupaten: "Pandeglang", provinsi: "Banten", angkatan: "2", xPct: 52, yPct: 71.5, labelAnchor: "end", labelDx: -8, labelDy: 6 },
+  { kabupaten: "Sukabumi", provinsi: "Jawa Barat", angkatan: "4", xPct: 54.5, yPct: 69.7, labelDy: 54 },
+  { kabupaten: "Sumedang", provinsi: "Jawa Barat", angkatan: "11", xPct: 57.5, yPct: 71.5, labelDy: -4 },
+  { kabupaten: "Garut", provinsi: "Jawa Barat", angkatan: "1", xPct: 60, yPct: 70.1, labelDy: 54 },
+  { kabupaten: "Indramayu", provinsi: "Jawa Barat", angkatan: "3", xPct: 62, yPct: 69.7, labelDy: -20 },
+  { kabupaten: "Cirebon", provinsi: "Jawa Barat", angkatan: "15", xPct: 64.5, yPct: 70.8, labelAnchor: "start", labelDx: 8, labelDy: -3 },
+  { kabupaten: "Pangandaran", provinsi: "Jawa Barat", angkatan: "7", xPct: 67, yPct: 69.6, labelDy: 54 },
 
   // — Jawa Tengah & Timur —
-  { kabupaten: "Brebes", provinsi: "Jawa Tengah", angkatan: "6", documented: true, xPct: 69, yPct: 66.7, labelAnchor: "end", labelDx: -6, labelDy: -20 },
-  { kabupaten: "Tegal", provinsi: "Jawa Tengah", angkatan: "5", documented: true, xPct: 71.5, yPct: 65.2, labelAnchor: "start", labelDx: 8, labelDy: -3 },
-  { kabupaten: "Temanggung", provinsi: "Jawa Tengah", angkatan: "8, 10", documented: true, xPct: 76.5, yPct: 62.4, labelDy: -4 },
-  { kabupaten: "Blora", provinsi: "Jawa Tengah", angkatan: "14", documented: false, xPct: 83, yPct: 60.6, labelDy: -4 },
-  { kabupaten: "Nganjuk", provinsi: "Jawa Timur", angkatan: "12", documented: false, xPct: 89, yPct: 57.4, labelAnchor: "start", labelDx: 9 },
+  { kabupaten: "Brebes", provinsi: "Jawa Tengah", angkatan: "6", xPct: 69, yPct: 66.7, labelAnchor: "end", labelDx: -6, labelDy: -20 },
+  { kabupaten: "Tegal", provinsi: "Jawa Tengah", angkatan: "5", xPct: 71.5, yPct: 65.2, labelAnchor: "start", labelDx: 8, labelDy: -3 },
+  { kabupaten: "Temanggung", provinsi: "Jawa Tengah", angkatan: "8, 10", xPct: 76.5, yPct: 62.4, labelDy: -4 },
+  { kabupaten: "Blora", provinsi: "Jawa Tengah", angkatan: "14", xPct: 83, yPct: 60.6, labelDy: -4 },
+  { kabupaten: "Nganjuk", provinsi: "Jawa Timur", angkatan: "12", xPct: 89, yPct: 57.4, labelAnchor: "start", labelDx: 9 },
 ];

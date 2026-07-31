@@ -3,7 +3,6 @@ import Image from "next/image";
 import { GraduationCap, Presentation, School, MapPin, MessageCircleHeart } from "lucide-react";
 import { getGuimStoryListing } from "@/lib/guim-story-data";
 import { getAllTestimoni } from "@/lib/guim-testimoni-data";
-import { guimCumulativeStats } from "@/lib/guim-stats";
 import GuimDataChart from "@/components/guim-data-chart";
 import GuimJalur from "@/components/guim-jalur";
 import GuimMap from "@/components/guim-map";
@@ -25,6 +24,19 @@ export const metadata: Metadata = buildMetadata({
 export default async function CeritaGuimPage() {
   const angkatanList = await getGuimStoryListing();
   const testimoni = await getAllTestimoni();
+
+  // Agregat real dari data angkatan yang sudah published — bukan angka hardcoded,
+  // supaya kartu hero ikut bertambah begitu cerita angkatan baru ditambahkan.
+  const heroStats = angkatanList.reduce(
+    (acc, a) => {
+      acc.siswa += a.jumlah_siswa ?? 0;
+      acc.guru += a.jumlah_guru ?? 0;
+      acc.sd += a.jumlah_sd ?? 0;
+      acc.provinsi.add(a.provinsi);
+      return acc;
+    },
+    { siswa: 0, guru: 0, sd: 0, provinsi: new Set<string>() }
+  );
 
   // Daftar angkatan sebagai ItemList: membantu mesin pencari mengenali halaman
   // ini sebagai indeks, dan membuka peluang sitelinks ke tiap angkatan.
@@ -72,7 +84,7 @@ export default async function CeritaGuimPage() {
         <div className="relative mx-auto max-w-6xl px-6 py-20 sm:py-24">
           <p className="text-xs font-bold uppercase tracking-[0.18em] text-teal-300">GUIM Story</p>
           <h1 className="mt-3 max-w-2xl font-display text-4xl font-semibold leading-tight sm:text-5xl">
-            Satu Dekade
+            15 Tahun
             <br />Gerakan UI Mengajar
           </h1>
           <p className="mt-6 max-w-xl text-lg text-ink-200">
@@ -83,10 +95,10 @@ export default async function CeritaGuimPage() {
           </p>
           <div className="mt-10 grid grid-cols-2 gap-4 sm:grid-cols-4">
             {[
-              { icon: GraduationCap, value: guimCumulativeStats.siswa.toLocaleString("id-ID") + "+", label: "Siswa unik" },
-              { icon: Presentation, value: guimCumulativeStats.guru.toLocaleString("id-ID") + "+", label: "Guru unik" },
-              { icon: School, value: guimCumulativeStats.sd, label: "Sekolah dasar" },
-              { icon: MapPin, value: guimCumulativeStats.provinsi, label: "Provinsi" },
+              { icon: GraduationCap, value: heroStats.siswa.toLocaleString("id-ID") + "+", label: "Siswa unik" },
+              { icon: Presentation, value: heroStats.guru.toLocaleString("id-ID") + "+", label: "Guru unik" },
+              { icon: School, value: heroStats.sd, label: "Sekolah dasar" },
+              { icon: MapPin, value: heroStats.provinsi.size, label: "Provinsi" },
             ].map((s) => (
               <div key={s.label} className="rounded-[4px_20px_4px_20px] bg-white/5 p-5">
                 <s.icon className="h-5 w-5 text-teal-300" aria-hidden strokeWidth={2} />
@@ -109,7 +121,7 @@ export default async function CeritaGuimPage() {
             angkatan yang lebih baru dan belum punya cerita lengkap di sini.
           </p>
           <Reveal delay={0.05} className="mt-6 rounded-[4px_24px_4px_24px] bg-paper-white p-4 shadow-xl sm:p-6">
-            <GuimMap />
+            <GuimMap documentedAngkatan={angkatanList.map((a) => a.angkatan)} />
           </Reveal>
         </div>
       </section>

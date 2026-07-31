@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { useRef } from "react";
 import { motion, useScroll, useTransform, useReducedMotion } from "framer-motion";
-import { BookMarked, GraduationCap, School, Home } from "lucide-react";
+import { BookMarked, GraduationCap, Presentation, School, Users } from "lucide-react";
 import type { GuimStory } from "@/lib/types";
 
 /**
@@ -80,22 +80,34 @@ export default function GuimJalur({ angkatanList }: { angkatanList: GuimStory[] 
                 </h3>
                 <p className="mt-1 text-sm text-ink-600">{a.tahun_pelaksanaan}</p>
                 <p className="mt-3 text-sm italic leading-relaxed text-ink-700">&ldquo;{a.tema}&rdquo;</p>
-                {a.jumlah_siswa != null && (
+                {(a.jumlah_siswa != null ||
+                  a.jumlah_guru != null ||
+                  a.jumlah_sd != null ||
+                  a.jumlah_pengajar != null ||
+                  a.jumlah_panitia != null) && (
                   <div className="mt-4 flex flex-wrap gap-2">
-                    <span className="flex items-center gap-1.5 rounded-[4px_10px_4px_10px] bg-teal-50 px-2.5 py-1.5 text-xs font-semibold text-teal-700">
-                      <GraduationCap className="h-3.5 w-3.5" aria-hidden strokeWidth={2} />
-                      {a.jumlah_siswa.toLocaleString("id-ID")} siswa
-                    </span>
-                    {a.jumlah_sd != null && (
+                    {a.jumlah_siswa != null && (
+                      <span className="flex items-center gap-1.5 rounded-[4px_10px_4px_10px] bg-teal-50 px-2.5 py-1.5 text-xs font-semibold text-teal-700">
+                        <GraduationCap className="h-3.5 w-3.5" aria-hidden strokeWidth={2} />
+                        {a.jumlah_siswa.toLocaleString("id-ID")} siswa
+                      </span>
+                    )}
+                    {a.jumlah_guru != null && (
                       <span className="flex items-center gap-1.5 rounded-[4px_10px_4px_10px] bg-gold-100 px-2.5 py-1.5 text-xs font-semibold text-gold-600">
+                        <Presentation className="h-3.5 w-3.5" aria-hidden strokeWidth={2} />
+                        {a.jumlah_guru} guru
+                      </span>
+                    )}
+                    {a.jumlah_sd != null && (
+                      <span className="flex items-center gap-1.5 rounded-[4px_10px_4px_10px] bg-ink-100 px-2.5 py-1.5 text-xs font-semibold text-ink-700">
                         <School className="h-3.5 w-3.5" aria-hidden strokeWidth={2} />
                         {a.jumlah_sd} SD
                       </span>
                     )}
-                    {a.jumlah_desa != null && (
-                      <span className="flex items-center gap-1.5 rounded-[4px_10px_4px_10px] bg-ink-100 px-2.5 py-1.5 text-xs font-semibold text-ink-700">
-                        <Home className="h-3.5 w-3.5" aria-hidden strokeWidth={2} />
-                        {a.jumlah_desa} desa
+                    {(a.jumlah_pengajar != null || a.jumlah_panitia != null) && (
+                      <span className="flex items-center gap-1.5 rounded-[4px_10px_4px_10px] bg-teal-50 px-2.5 py-1.5 text-xs font-semibold text-teal-700">
+                        <Users className="h-3.5 w-3.5" aria-hidden strokeWidth={2} />
+                        {(a.jumlah_pengajar ?? 0) + (a.jumlah_panitia ?? 0)} mahasiswa
                       </span>
                     )}
                   </div>

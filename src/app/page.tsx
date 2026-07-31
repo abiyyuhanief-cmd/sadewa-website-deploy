@@ -6,6 +6,7 @@ import LeadForm from "@/components/lead-form";
 import Reveal from "@/components/reveal";
 import Gallery from "@/components/gallery";
 import JsonLd from "@/components/json-ld";
+import { getGuimStoryListing } from "@/lib/guim-story-data";
 import {
   absoluteUrl,
   buildMetadata,
@@ -13,6 +14,8 @@ import {
   SITE_TITLE,
   SITE_URL,
 } from "@/lib/site";
+
+export const revalidate = 300;
 
 export const metadata = buildMetadata({
   title: SITE_TITLE,
@@ -71,7 +74,16 @@ const programs = [
   },
 ];
 
-export default function HomePage() {
+export default async function HomePage() {
+  const angkatanList = await getGuimStoryListing();
+  // Total siswa & guru terdampak GUIM — dijumlah dari SEMUA angkatan published
+  // (bukan hardcoded), jadi angkanya ikut naik begitu angkatan baru terbit di
+  // GUIM Story, mencerminkan dampak yang terus bertumbuh.
+  const siswaGuruTerdampak = angkatanList.reduce(
+    (total, a) => total + (a.jumlah_siswa ?? 0) + (a.jumlah_guru ?? 0),
+    0
+  );
+
   return (
     <>
       <JsonLd data={organizationSchema} />
@@ -142,7 +154,9 @@ export default function HomePage() {
               <p className="font-display text-2xl font-semibold text-teal-700">15th</p>
               <p className="mt-0.5 text-xs text-ink-600">Gerakan UI Mengajar</p>
               <div className="mt-3 border-t border-paper-200 pt-3">
-                <p className="font-display text-2xl font-semibold text-teal-700">8.565+</p>
+                <p className="font-display text-2xl font-semibold text-teal-700">
+                  {siswaGuruTerdampak.toLocaleString("id-ID")}+
+                </p>
                 <p className="mt-0.5 text-xs text-ink-600">Siswa &amp; guru terdampak</p>
               </div>
             </div>
@@ -200,12 +214,11 @@ export default function HomePage() {
               icon={<Plane className="h-5 w-5" aria-hidden strokeWidth={2} />}
             />
             <StatCounter
-              value={8565}
+              value={siswaGuruTerdampak}
               suffix="+"
               label="Siswa & guru SD terdampak GUIM"
               icon={<Users className="h-5 w-5" aria-hidden strokeWidth={2} />}
             />
-            {/* <StatCounter value={guimCumulativeStats.siswa} suffix="+" label="Siswa & guru SD terdampak GUIM" /> */}
           </div>
           <Link
             href="/cerita-guim"

@@ -14,8 +14,11 @@ import {
 } from "lucide-react";
 import LeadForm from "@/components/lead-form";
 import Reveal from "@/components/reveal";
+import { getGuimStoryListing } from "@/lib/guim-story-data";
 import { guimCumulativeStats } from "@/lib/guim-stats";
 import { buildMetadata } from "@/lib/site";
+
+export const revalidate = 300;
 
 export const metadata: Metadata = buildMetadata({
   title: "Tentang Kami",
@@ -24,47 +27,67 @@ export const metadata: Metadata = buildMetadata({
   path: "/about",
 });
 
-const timeline: {
-  icon: LucideIcon;
-  tag: string;
-  title: string;
-  desc: string;
-  logo?: boolean;
-}[] = [
-  {
-    icon: Sprout,
-    tag: "Titik awal — 2011",
-    title: "GUIM 1 berangkat ke Garut",
-    desc: "Gerakan UI Mengajar (GUIM) memulai jejak intervensi pendidikan dasar di Kabupaten Garut, Jawa Barat — cikal bakal garis keturunan langsung Sadewa hari ini.",
-  },
-  {
-    icon: Landmark,
-    tag: "Kelahiran Sadewa",
-    title: "Alumni GUIM mendirikan Perkumpulan",
-    desc: "Agar kepedulian tidak berhenti saat masa penugasan kampus usai, sekelompok alumni GUIM mendirikan Sayap Dewantara Indonesia sebagai badan hukum Perkumpulan — wadah resmi untuk mewujudkan manfaat pendidikan yang berkelanjutan.",
-  },
-  {
-    icon: Plane,
-    tag: "Perluasan program",
-    title: "Jelajah Dewantara dimulai",
-    desc: "Delapan tahun lalu, Sadewa memperluas jangkauan lewat Jelajah Dewantara — program intervensi lintas daerah yang menjadi katalisator jejaring dan kemandirian pendidikan di wilayah sasaran GUIM.",
-  },
-  {
-    icon: BookOpen,
-    tag: "10 Angkatan Pertama — Terdokumentasi",
-    title: `${guimCumulativeStats.siswa.toLocaleString("id-ID")}+ siswa & ${guimCumulativeStats.guru.toLocaleString("id-ID")}+ guru terdampak`,
-    desc: `Sepuluh angkatan pertama GUIM telah menjangkau ${guimCumulativeStats.sd} SD di ${guimCumulativeStats.desa} desa, ${guimCumulativeStats.kecamatan} kecamatan, ${guimCumulativeStats.kabupaten} kabupaten, dan ${guimCumulativeStats.provinsi} provinsi — rekam jejak yang kini bisa dibaca lengkap per angkatan di GUIM Story.`,
-  },
-  {
-    icon: Rocket,
-    tag: "Berlanjut",
-    title: "GUIM Melangkah ke Angkatan 16",
-    desc: "Estafet regenerasi pengajar terus berjalan jauh melampaui 10 angkatan pertama — GUIM 15 baru saja rampung dan GUIM 16 sedang berjalan. GUIM Story akan terus diperbarui seiring dokumentasi tiap angkatan baru selesai disusun.",
-    logo: true,
-  },
-];
+export default async function AboutPage() {
+  const angkatanList = await getGuimStoryListing();
 
-export default function AboutPage() {
+  // Agregat "10 angkatan pertama" dihitung dari data published (angkatan <= 10),
+  // bukan hardcoded — supaya siswa/guru/SD/kabupaten/provinsi ikut akurat kalau
+  // ada koreksi data. `desa` & `kecamatan` tetap dari guimCumulativeStats karena
+  // kolomnya di DB cuma jumlah per angkatan (bukan daftar nama), jadi tidak bisa
+  // di-dedup dari sini (mis. Pesisir Barat dipakai GUIM 9 & 10, desa yang sama).
+  const firstTen = angkatanList.filter((a) => a.angkatan <= 10);
+  const firstTenStats = firstTen.reduce(
+    (acc, a) => {
+      acc.siswa += a.jumlah_siswa ?? 0;
+      acc.guru += a.jumlah_guru ?? 0;
+      acc.sd += a.jumlah_sd ?? 0;
+      acc.kabupaten.add(a.kabupaten);
+      acc.provinsi.add(a.provinsi);
+      return acc;
+    },
+    { siswa: 0, guru: 0, sd: 0, kabupaten: new Set<string>(), provinsi: new Set<string>() }
+  );
+
+  const timeline: {
+    icon: LucideIcon;
+    tag: string;
+    title: string;
+    desc: string;
+    logo?: boolean;
+  }[] = [
+    {
+      icon: Sprout,
+      tag: "Titik awal — 2011",
+      title: "GUIM 1 berangkat ke Garut",
+      desc: "Gerakan UI Mengajar (GUIM) memulai jejak intervensi pendidikan dasar di Kabupaten Garut, Jawa Barat — cikal bakal garis keturunan langsung Sadewa hari ini.",
+    },
+    {
+      icon: Landmark,
+      tag: "Kelahiran Sadewa",
+      title: "Alumni GUIM mendirikan Perkumpulan",
+      desc: "Agar kepedulian tidak berhenti saat masa penugasan kampus usai, sekelompok alumni GUIM mendirikan Sayap Dewantara Indonesia sebagai badan hukum Perkumpulan — wadah resmi untuk mewujudkan manfaat pendidikan yang berkelanjutan.",
+    },
+    {
+      icon: Plane,
+      tag: "Perluasan program",
+      title: "Jelajah Dewantara dimulai",
+      desc: "Delapan tahun lalu, Sadewa memperluas jangkauan lewat Jelajah Dewantara — program intervensi lintas daerah yang menjadi katalisator jejaring dan kemandirian pendidikan di wilayah sasaran GUIM.",
+    },
+    {
+      icon: BookOpen,
+      tag: "10 Angkatan Pertama — Terdokumentasi",
+      title: `${firstTenStats.siswa.toLocaleString("id-ID")}+ siswa & ${firstTenStats.guru.toLocaleString("id-ID")}+ guru terdampak`,
+      desc: `Sepuluh angkatan pertama GUIM telah menjangkau ${firstTenStats.sd} SD di ${guimCumulativeStats.desa} desa, ${guimCumulativeStats.kecamatan} kecamatan, ${firstTenStats.kabupaten.size} kabupaten, dan ${firstTenStats.provinsi.size} provinsi — rekam jejak yang kini bisa dibaca lengkap per angkatan di GUIM Story.`,
+    },
+    {
+      icon: Rocket,
+      tag: "Berlanjut",
+      title: "GUIM Melangkah ke Angkatan 16",
+      desc: "Estafet regenerasi pengajar terus berjalan jauh melampaui 10 angkatan pertama — GUIM 15 baru saja rampung dan GUIM 16 sedang berjalan. GUIM Story akan terus diperbarui seiring dokumentasi tiap angkatan baru selesai disusun.",
+      logo: true,
+    },
+  ];
+
   return (
     <>
       {/* Hero narasi */}
