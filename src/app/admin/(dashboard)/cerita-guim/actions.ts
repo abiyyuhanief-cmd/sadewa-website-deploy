@@ -4,7 +4,6 @@ import { redirect } from "next/navigation";
 import { revalidatePath } from "next/cache";
 import { createClient } from "@/lib/supabase/server";
 import {
-  arrayToComma,
   commaToArray,
   linesToArray,
   linesToTitik,
@@ -43,8 +42,6 @@ function buildRecord(formData: FormData) {
     status: String(formData.get("status") ?? "draft"),
   };
 }
-
-export { arrayToComma };
 
 export async function createGuimStory(_prevState: FormState, formData: FormData): Promise<FormState> {
   const supabase = await createClient();
