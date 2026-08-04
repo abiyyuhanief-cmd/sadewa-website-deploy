@@ -104,14 +104,22 @@ export default async function AboutPage() {
           alt=""
           fill
           aria-hidden
-          className="pointer-events-none absolute inset-0 object-cover opacity-[0.10]"
+          className="pointer-events-none absolute inset-0 object-cover opacity-35"
+        />
+        {/* Scrim radial berpusat di blok teks: bidang baca dibuat nyaris polos
+            sementara foto dibiarkan terlihat tegas di tepi kanan & bawah. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute inset-0 bg-[radial-gradient(140%_95%_at_32%_45%,rgba(253,253,252,0.97)_0%,rgba(253,253,252,0.9)_45%,rgba(253,253,252,0.42)_78%,rgba(253,253,252,0.08)_100%)]"
         />
         <div className="relative mx-auto max-w-4xl px-6 py-20 sm:py-28">
           <p className="text-xs font-bold uppercase tracking-[0.14em] text-teal-600">Tentang Kami</p>
-          <h1 className="mt-3 font-display text-4xl font-semibold leading-tight text-ink-900 sm:text-5xl">
+          {/* max-w dikunci per-elemen supaya panjang baris tetap di rentang baca
+              nyaman (judul ±30 karakter, body ±60) walau kontainernya lebar. */}
+          <h1 className="mt-4 max-w-3xl font-display text-4xl font-semibold leading-[1.15] tracking-[-0.01em] text-ink-900 sm:text-5xl">
             Perkumpulan yang Lahir dari Kepedulian yang Tak Ingin Berhenti.
           </h1>
-          <p className="mt-6 text-lg leading-relaxed text-ink-700">
+          <p className="mt-6 max-w-[58ch] text-lg leading-[1.75] text-ink-700 sm:text-xl sm:leading-[1.7]">
             Sayap Dewantara Indonesia (Sadewa) adalah komunitas berbadan hukum Perkumpulan, diinisiasi
             oleh alumni Gerakan UI Mengajar (GUIM), didirikan untuk mewadahi alumni GUIM dan berbagai
             pihak dalam memberikan manfaat berkelanjutan bagi pendidikan dasar di daerah pelosok Indonesia.
@@ -121,7 +129,16 @@ export default async function AboutPage() {
 
       {/* Narasi lengkap — FR-006 */}
       <section className="relative overflow-hidden bg-paper-50">
-        <div className="pointer-events-none absolute inset-y-0 right-0 hidden w-[38%] sm:block">
+        {/* Foto kanan tetap jadi atmosfer, tapi scrim-nya dibalik arah: paling
+            pekat justru di sisi kanan (tempat kartu berdiri) supaya foto turun
+            jadi tekstur, bukan latar teks. Sebelumnya gradient memudar ke kanan
+            sehingga paragraf kolom kedua duduk persis di atas foto full-opacity. */}
+        {/* Tepi kiri di-mask (bukan cuma ditumpuk overlay) supaya panel foto
+            benar-benar habis, tidak menyisakan garis rambut di batasnya. */}
+        <div
+          className="pointer-events-none absolute inset-y-0 right-0 hidden w-[46%] [mask-image:linear-gradient(to_right,transparent_0%,#000_40%)] sm:block"
+          aria-hidden
+        >
           <Image
             src="/gallery/anak-semangat.jpg"
             alt=""
@@ -129,36 +146,41 @@ export default async function AboutPage() {
             aria-hidden
             className="object-cover"
           />
-          <div className="absolute inset-0 bg-gradient-to-r from-paper-50 via-paper-50/40 to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-r from-paper-50 via-paper-50/88 to-paper-50/70" />
+          {/* Feather atas-bawah supaya panel foto tidak berhenti sebagai
+              persegi yang terpotong tajam di batas section. */}
+          <div className="absolute inset-0 bg-gradient-to-b from-paper-50 via-transparent to-paper-50" />
         </div>
-        <div className="relative mx-auto grid max-w-5xl gap-10 px-6 py-16 sm:grid-cols-[1fr_1fr]">
-          <Reveal>
-            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100">
-              <Lightbulb className="h-5 w-5 text-teal-700" aria-hidden strokeWidth={2} />
-            </div>
-            <h2 className="font-display text-2xl font-semibold text-ink-900">Kenapa Kami Ada</h2>
-            <p className="mt-4 text-base leading-relaxed text-ink-700">
-              Program pengajaran kampus punya batas waktu, tapi kebutuhan anak-anak di daerah pelosok
-              tidak berhenti begitu penugasan selesai. Dari kegelisahan itu, alumni GUIM memilih untuk
-              tidak sekadar kembali ke rutinitas masing-masing — mereka membangun Sadewa sebagai rumah
-              bersama untuk melanjutkan kontribusi secara terstruktur dan bertanggung jawab secara hukum.
-            </p>
-          </Reveal>
-          <Reveal delay={0.08}>
-            <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100">
-              <Scale className="h-5 w-5 text-teal-700" aria-hidden strokeWidth={2} />
-            </div>
-            <h2 className="font-display text-2xl font-semibold text-ink-900">Status Badan Hukum & Relasi dengan GUIM</h2>
-            <p className="mt-4 text-base leading-relaxed text-ink-700">
-              Sadewa berdiri sebagai Perkumpulan yang sah secara hukum, terpisah secara struktur namun
-              tetap terhubung erat secara garis keturunan dengan Gerakan UI Mengajar. Alumni GUIM secara
-              alami menjadi anggota Sadewa, menjadikan komunitas ini kelanjutan formal dari semangat yang
-              tumbuh di GUIM — bukan organisasi baru yang lahir tanpa akar. Di forum pengambilan keputusan
-              GUIM, posisi itu dijaga: Sadewa hadir sebagai fasilitator yang menyiapkan riset dan
-              notulensi, tanpa hak beropini di dalamnya, supaya arah gerakan tetap ditentukan oleh
-              angkatan yang menjalankannya.
-            </p>
-          </Reveal>
+        {/* Kolom kanan sengaja lebih lebar: teksnya ~2x lebih panjang, jadi
+            tinggi kedua kartu bertemu tanpa menyisakan ruang kosong menganga. */}
+        <div className="relative mx-auto grid max-w-5xl gap-5 px-6 py-16 sm:py-20 md:grid-cols-[0.88fr_1.12fr] md:gap-6">
+          {[
+            {
+              icon: Lightbulb,
+              title: "Kenapa Kami Ada",
+              body: "Program pengajaran kampus punya batas waktu, tapi kebutuhan anak-anak di daerah pelosok tidak berhenti begitu penugasan selesai. Dari kegelisahan itu, alumni GUIM memilih untuk tidak sekadar kembali ke rutinitas masing-masing — mereka membangun Sadewa sebagai rumah bersama untuk melanjutkan kontribusi secara terstruktur dan bertanggung jawab secara hukum.",
+            },
+            {
+              icon: Scale,
+              title: "Status Badan Hukum & Relasi dengan GUIM",
+              body: "Sadewa berdiri sebagai Perkumpulan yang sah secara hukum, terpisah secara struktur namun tetap terhubung erat secara garis keturunan dengan Gerakan UI Mengajar. Alumni GUIM secara alami menjadi anggota Sadewa, menjadikan komunitas ini kelanjutan formal dari semangat yang tumbuh di GUIM — bukan organisasi baru yang lahir tanpa akar. Di forum pengambilan keputusan GUIM, posisi itu dijaga: Sadewa hadir sebagai fasilitator yang menyiapkan riset dan notulensi, tanpa hak beropini di dalamnya, supaya arah gerakan tetap ditentukan oleh angkatan yang menjalankannya.",
+            },
+          ].map((card, i) => (
+            <Reveal
+              as="article"
+              key={card.title}
+              delay={i * 0.08}
+              className="flex h-full flex-col rounded-[4px_20px_4px_20px] border border-paper-200 bg-paper-white p-7 shadow-[0_1px_2px_rgba(39,53,55,0.04),0_10px_28px_-16px_rgba(39,53,55,0.22)] sm:p-8"
+            >
+              <div className="mb-5 flex h-11 w-11 items-center justify-center rounded-[10px] bg-teal-100">
+                <card.icon className="h-5 w-5 text-teal-700" aria-hidden strokeWidth={2} />
+              </div>
+              <h2 className="font-display text-2xl font-semibold leading-snug text-ink-900 text-balance">
+                {card.title}
+              </h2>
+              <p className="mt-4 max-w-[62ch] text-base leading-[1.75] text-ink-700">{card.body}</p>
+            </Reveal>
+          ))}
         </div>
       </section>
 
