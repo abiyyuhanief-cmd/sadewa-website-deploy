@@ -1,6 +1,16 @@
 import type { Metadata } from "next";
 import Image from "next/image";
-import { GraduationCap, Presentation, School, MapPin, MessageCircleHeart } from "lucide-react";
+import {
+  GraduationCap,
+  Presentation,
+  School,
+  MapPin,
+  MessageCircleHeart,
+  Gavel,
+  Route,
+  Zap,
+  ShoppingBasket,
+} from "lucide-react";
 import { getGuimStoryListing } from "@/lib/guim-story-data";
 import { getAllTestimoni } from "@/lib/guim-testimoni-data";
 import GuimDataChart from "@/components/guim-data-chart";
@@ -88,8 +98,8 @@ export default async function CeritaGuimPage() {
             <br />Gerakan UI Mengajar
           </h1>
           <p className="mt-6 max-w-xl text-lg text-ink-200">
-            Sepuluh angkatan pertama, satu misi: memotivasi siswa didik sekolah dasar di daerah pelosok
-            agar menjadi lebih unggul dan menginspirasi Indonesia. Gerakan ini terus berlanjut — kini
+            Sepuluh angkatan pertama, satu tujuan yang bertahan: memotivasi anak usia sekolah dasar di
+            daerah pelosok, dengan manfaat yang berkelanjutan. Gerakan ini terus berlanjut — kini
             memasuki angkatan ke-16 — dan GUIM Story akan terus diperbarui seiring perjalanan setiap
             angkatan baru.
           </p>
@@ -123,6 +133,50 @@ export default async function CeritaGuimPage() {
           <Reveal delay={0.05} className="mt-6 rounded-[4px_24px_4px_24px] bg-paper-white p-4 shadow-xl sm:p-6">
             <GuimMap documentedAngkatan={angkatanList.map((a) => a.angkatan)} />
           </Reveal>
+
+          {/* Kriteria "daerah pelosok" — hasil kesepakatan Musyawarah Besar kedua GUIM.
+              Frasa ini dipakai di banyak halaman tapi tidak pernah didefinisikan; blok
+              ini yang menjawab "kenapa titik aksinya di situ". */}
+          <Reveal delay={0.1} className="mt-10">
+            <h3 className="font-display text-2xl font-semibold text-ink-900">
+              Apa yang Disebut &ldquo;Daerah Pelosok&rdquo;?
+            </h3>
+            <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-600">
+              Bukan istilah yang dipakai longgar. Lewat Musyawarah Besar, GUIM menyepakati kriteria
+              konkretnya — sebuah wilayah cukup memenuhi salah satu dari tiga poin berikut untuk masuk
+              pertimbangan titik aksi.
+            </p>
+            <div className="mt-6 grid gap-4 sm:grid-cols-3">
+              {[
+                {
+                  icon: Route,
+                  title: "Akses sulit & mahal",
+                  desc: "Tidak ada jalan raya, bergantung jadwal atau cuaca tertentu, hanya bisa ditempuh berjalan kaki, atau terhalang hambatan alam besar.",
+                },
+                {
+                  icon: Zap,
+                  title: "Fasilitas umum minim",
+                  desc: "Fasilitas pendidikan, kesehatan, listrik, informasi-komunikasi, dan air bersih tidak tersedia atau sangat terbatas.",
+                },
+                {
+                  icon: ShoppingBasket,
+                  title: "Kebutuhan pokok mahal",
+                  desc: "Harga-harga tinggi dan/atau sulitnya ketersediaan pangan, sandang, serta papan atau perumahan.",
+                },
+              ].map((k) => (
+                <div
+                  key={k.title}
+                  className="rounded-[4px_20px_4px_20px] border border-paper-200 bg-paper-white p-6"
+                >
+                  <div className="mb-4 flex h-10 w-10 items-center justify-center rounded-[10px] bg-teal-100">
+                    <k.icon className="h-5 w-5 text-teal-700" aria-hidden strokeWidth={2} />
+                  </div>
+                  <p className="font-display text-base font-semibold text-ink-900">{k.title}</p>
+                  <p className="mt-2 text-sm leading-relaxed text-ink-600">{k.desc}</p>
+                </div>
+              ))}
+            </div>
+          </Reveal>
         </div>
       </section>
 
@@ -141,6 +195,81 @@ export default async function CeritaGuimPage() {
             Pilih Angkatan untuk Cerita Lengkap
           </h2>
           <GuimJalur angkatanList={angkatanList} />
+        </div>
+      </section>
+
+      {/* Visi & nilai per periode — hasil Musyawarah Besar. Redaksi visi & nilai
+          dikutip persis dari keputusan forum, jadi jangan diparafrase. */}
+      <section className="bg-paper-50">
+        <div className="mx-auto max-w-6xl px-6 py-14 sm:py-16">
+          <p className="flex items-center gap-1.5 text-xs font-bold uppercase tracking-[0.14em] text-teal-600">
+            <Gavel className="h-4 w-4" aria-hidden strokeWidth={2} />
+            Musyawarah Besar
+          </p>
+          <h2 className="mt-2 font-display text-3xl font-semibold text-ink-900 sm:text-4xl">
+            Visi yang Diuji Ulang Tiap Lima Tahun
+          </h2>
+          <p className="mt-3 max-w-2xl text-sm leading-relaxed text-ink-600">
+            Setiap lima angkatan, perwakilan seluruh angkatan GUIM berkumpul dalam Musyawarah Besar untuk
+            menilai apakah visi dan nilai yang berlaku masih relevan — lalu menyepakati rumusan untuk lima
+            tahun berikutnya.
+          </p>
+          <div className="mt-8 grid gap-5 sm:grid-cols-2">
+            {[
+              {
+                periode: "GUIM 6–10",
+                mubes: "Mubes I · 2016, pasca-GUIM 5",
+                current: false,
+                visi:
+                  "Terwujudnya Gerakan UI Mengajar yang memotivasi siswa di Sekolah Dasar daerah pelosok agar menjadi unggul dan menginspirasi Indonesia serta berkelanjutan.",
+                nilai: ["Pendidikan", "Pengabdian Masyarakat", "Sinergis"],
+              },
+              {
+                periode: "GUIM 11–15",
+                mubes: "Mubes II · setelah satu dekade GUIM",
+                current: true,
+                visi:
+                  "Menjadi wadah pengabdian masyarakat di bidang pendidikan yang memiliki manfaat keberlanjutan dan menyebarkan semangat inspirasi dengan memotivasi anak usia sekolah dasar di daerah pelosok.",
+                nilai: ["Adaptif", "Semangat Belajar", "Dedikatif"],
+              },
+            ].map((p, i) => (
+              <Reveal
+                key={p.periode}
+                delay={i * 0.08}
+                className={`rounded-[4px_24px_4px_24px] border bg-paper-white p-7 sm:p-8 ${
+                  p.current ? "border-teal-600" : "border-paper-200"
+                }`}
+              >
+                <div className="flex flex-wrap items-center gap-2">
+                  <p className="font-display text-xl font-semibold text-ink-900">{p.periode}</p>
+                  {p.current && (
+                    <span className="rounded-full bg-teal-600 px-2.5 py-0.5 text-[11px] font-bold uppercase tracking-wide text-paper-50">
+                      Berlaku sekarang
+                    </span>
+                  )}
+                </div>
+                <p className="mt-1 text-xs font-semibold uppercase tracking-wider text-teal-600">
+                  {p.mubes}
+                </p>
+                <p className="mt-4 border-l-2 border-paper-200 pl-4 text-base italic leading-relaxed text-ink-700">
+                  &ldquo;{p.visi}&rdquo;
+                </p>
+                <p className="mt-6 text-xs font-bold uppercase tracking-wider text-ink-500">Nilai</p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {p.nilai.map((n) => (
+                    <span
+                      key={n}
+                      className={`rounded-full px-3 py-1 text-xs font-semibold ${
+                        p.current ? "bg-teal-100 text-teal-800" : "bg-paper-100 text-ink-600"
+                      }`}
+                    >
+                      {n}
+                    </span>
+                  ))}
+                </div>
+              </Reveal>
+            ))}
+          </div>
         </div>
       </section>
 

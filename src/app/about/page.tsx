@@ -10,6 +10,7 @@ import {
   Lightbulb,
   Scale,
   Handshake,
+  Gavel,
   type LucideIcon,
 } from "lucide-react";
 import LeadForm from "@/components/lead-form";
@@ -59,7 +60,7 @@ export default async function AboutPage() {
       icon: Sprout,
       tag: "Titik awal — 2011",
       title: "GUIM 1 berangkat ke Garut",
-      desc: "Gerakan UI Mengajar (GUIM) memulai jejak intervensi pendidikan dasar di Kabupaten Garut, Jawa Barat — cikal bakal garis keturunan langsung Sadewa hari ini.",
+      desc: "Berawal dari agenda BEM UI 2011 yang mengusung semangat pemberantasan buta huruf — target yang saat itu terlalu berat untuk dicapai langsung, sehingga fokusnya dipilih menjadi memotivasi anak-anak agar semangat belajar. Dari situ Gerakan UI Mengajar (GUIM) memulai jejak intervensi pendidikan dasar di Kabupaten Garut, Jawa Barat — cikal bakal garis keturunan langsung Sadewa hari ini.",
     },
     {
       icon: Landmark,
@@ -78,6 +79,12 @@ export default async function AboutPage() {
       tag: "10 Angkatan Pertama — Terdokumentasi",
       title: `${firstTenStats.siswa.toLocaleString("id-ID")}+ siswa & ${firstTenStats.guru.toLocaleString("id-ID")}+ guru terdampak`,
       desc: `Sepuluh angkatan pertama GUIM telah menjangkau ${firstTenStats.sd} SD di ${guimCumulativeStats.desa} desa, ${guimCumulativeStats.kecamatan} kecamatan, ${firstTenStats.kabupaten.size} kabupaten, dan ${firstTenStats.provinsi.size} provinsi — rekam jejak yang kini bisa dibaca lengkap per angkatan di GUIM Story.`,
+    },
+    {
+      icon: Gavel,
+      tag: "Mubes Kedua — Peran Sadewa",
+      title: "Riset Satu Dekade & Visi GUIM 11–15",
+      desc: "Sadewa menjadi pelaksana Musyawarah Besar kedua GUIM. Expert Group Sadewa menghimpun tulisan 308 alumni GUIM 1–10 — sekitar 40% dari seluruh alumni, ±530 halaman dengan 264.918 token teks — lalu menganalisisnya sebagai studi wacana berbasis corpus linguistics. Hasilnya menjadi bahan forum untuk menyepakati visi dan nilai yang dipakai GUIM 11–15.",
     },
     {
       icon: Rocket,
@@ -146,7 +153,10 @@ export default async function AboutPage() {
               Sadewa berdiri sebagai Perkumpulan yang sah secara hukum, terpisah secara struktur namun
               tetap terhubung erat secara garis keturunan dengan Gerakan UI Mengajar. Alumni GUIM secara
               alami menjadi anggota Sadewa, menjadikan komunitas ini kelanjutan formal dari semangat yang
-              tumbuh di GUIM — bukan organisasi baru yang lahir tanpa akar.
+              tumbuh di GUIM — bukan organisasi baru yang lahir tanpa akar. Di forum pengambilan keputusan
+              GUIM, posisi itu dijaga: Sadewa hadir sebagai fasilitator yang menyiapkan riset dan
+              notulensi, tanpa hak beropini di dalamnya, supaya arah gerakan tetap ditentukan oleh
+              angkatan yang menjalankannya.
             </p>
           </Reveal>
         </div>
